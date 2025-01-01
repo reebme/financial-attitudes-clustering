@@ -1,0 +1,25 @@
+your-portfolio-project/
+│
+├── README.md                   # High-level overview of your project
+│
+├── requirements.txt            # (Or environment.yml) for Python dependencies
+│
+├── data/                       # Store data files here (optional or partial)
+│   ├── raw/                    # Original/unmodified data from sources
+│   ├── processed/              # Any cleaned or pre-processed data files
+│   └── README.md               # Document where data came from, licensing, etc.
+│
+├── notebooks/                  # Jupyter notebooks
+│   ├── 01_EDA.ipynb            # Exploratory Data Analysis
+│   ├── 02_Clustering.ipynb     # Clustering/Modeling
+│   ├── 03_Comparison.ipynb     # Comparing clusters vs. external classifications
+│   └── 04_FinalReport.ipynb    # (Optional) Polished summary or final write-up
+│
+├── src/ (or scripts/)          # Python scripts or utility functions
+│   ├── data_preprocessing.py   # e.g., code for cleaning/merging data
+│   └── analysis_helpers.py     # e.g., reusable functions for clustering or plotting
+│
+└── results/ (or outputs/)      # Generated outputs (figures, tables, final CSVs)
+    ├── figures/                # Graphs, plots, etc.
+    ├── tables/                 # Any summary tables
+    └── cluster_assignments.csv # Example final output of your clustering
