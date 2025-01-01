@@ -16,3 +16,18 @@ This project explores the relationship between financial mindsets and macroecono
 - [World Bank Findex Database](https://www.worldbank.org/en/topic/financialinclusion)
 - [World Bank Income Classification](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups)
 - [Democracy Index](https://www.eiu.com/topic/democracy-index)
+
+## Data Description
+
+### Global Findex Database
+
+The Global Findex database provides comprehensive data on how adults save, borrow, make payments, and manage risk across over 140 countries.
+
+For this project, the following key variables were utilized:
+
+| Variable Name                | Description                                                    |
+|------------------------------|----------------------------------------------------------------|
+
+### Data Processing
+
+The raw data was cleaned and processed as follows:

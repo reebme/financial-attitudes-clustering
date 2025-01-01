@@ -1,2 +1,9 @@
 Data/
 Notes/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python files
+*.pyc
+__pycache__/
