@@ -24,8 +24,6 @@ This project explores the relationship between financial mindsets and macroecono
 
 ## Data Description
 
-### Processed Data
-
 ### Data Processing
 
 The raw data was cleaned and processed as follows:
@@ -34,6 +32,10 @@ The raw data was cleaned and processed as follows:
 3. Transformed the data by indexing it with country names. The columns represent series codes, and the values correspond to the most recent survey wave for each series.
 4. Removed all rows (excluded all countries) with no data available.
 5. Removed all columns that had more than 50% missing values. This step excluded data related to rural/urban stratification.
+6. Missing values were imputed using appropriate aggregate values for each column.
+
+### Processed Data
+The cleaned and processed data has been exported to a CSV file and is stored in the `Data/Processed/` directory.
 
 ### Global Financial Inclusion Database (Global Findex Database)
 
