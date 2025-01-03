@@ -8,9 +8,10 @@ This project explores the relationship between financial mindsets and macroecono
 - To compare these clusters with World Bank income classifications and democracy indices.
 
 ## Repository Structure
-- `notebooks/`: Jupyter notebooks for each analysis step.
-- `src/`: Python scripts for data preprocessing and analysis helpers.
-- `results/`: Generated figures, tables, and final cluster assignments.
+- `Data/Processed`: Preprocessed datasets used for further analysis.
+- `Notebooks/`: Jupyter notebooks for each analysis step.
+- `Src/`: Python scripts for data preprocessing and analysis helpers.
+- `Results/`: Generated figures, tables, and final cluster assignments.
 
 ## Data Sources
 - [World Bank Global Financial Inclusion Database](https://databank.worldbank.org/source/global-financial-inclusion)
