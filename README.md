@@ -41,8 +41,10 @@ The cleaned and processed data has been exported to a CSV file and is stored in 
 
 The Global Findex database provides comprehensive data on financial attitudes and behaviours across countries.
 
+For the purpose of this project, a subset of the data was analyzed. The file `worried_data.csv` contains information about the percentage of the population worried about day-to-day expenses, educational expenses, and having money for old age.
+
 For this project, the following variables were utilized:
-worried_data.csv
+- worried_data.csv
 
 | Series Code                | Series Name                                                    |
 |------------------------------|----------------------------------------------------------------|
