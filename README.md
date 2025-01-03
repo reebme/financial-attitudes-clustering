@@ -24,14 +24,25 @@ This project explores the relationship between financial mindsets and macroecono
 
 ## Data Description
 
+### Processed Data
+
+### Data Processing
+
+The raw data was cleaned and processed as follows:
+1. Eliminated rows that lacked a country name or a series code.
+2. Ordered the data to cluster related series together.
+3. Transformed the data by indexing it with country names. The columns represent series codes, and the values correspond to the most recent survey wave for each series.
+4. Removed all rows (excluded all countries) with no data available.
+5. Removed all columns that had more than 50% missing values. This step excluded data related to rural/urban stratification.
+
 ### Global Financial Inclusion Database (Global Findex Database)
 
-The Global Findex database provides comprehensive data on how adults save, borrow, make payments, and manage risk across over 140 countries.
+The Global Findex database provides comprehensive data on financial attitudes and behaviours across countries.
 
-For this project, the following key variables were utilized:
+For this project, the following variables were utilized:
 worried_data.csv
 
-| Variable Name                | Description                                                    |
+| Series Code                | Series Name                                                    |
 |------------------------------|----------------------------------------------------------------|
 | fin44b3.d | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all (% age 15+) |
 | fin44b3.d.1 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, female (% age 15+) |
@@ -189,6 +200,3 @@ worried_data.csv
 | fin44a1.d.10 | Worried about not having enough money for old age: very worried, urban (% age 15+) |
 | fin44a1.d.3 | Worried about not having enough money for old age: very worried, young (% ages 15-24) |
 
-### Data Processing
-
-The raw data was cleaned and processed as follows:
