@@ -15,8 +15,10 @@ def plot_metric_clusters(cluster_no, metric, iter_no, plot_title, xlabel, ylabel
     Returns:
     - None
     """
+    subplot_height = 5
+
     plot_no = len(cluster_no)
-    fig, ax = plt.subplots(plot_no, figsize = (10,11))
+    fig, ax = plt.subplots(plot_no, figsize = (10, subplot_height * plot_no))
 
     # If there's only one subplot, make ax iterable
     if plot_no == 1:
