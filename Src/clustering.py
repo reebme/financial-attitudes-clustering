@@ -130,7 +130,7 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         iter_silh_score = []
 
         for _ in range(N):
-            kmeans = KMeans(**param_settings).fit(X_PCA[:, 0:3])
+            kmeans = KMeans(**param_settings).fit(X_PCA)
             iter_wgss.append(kmeans.inertia_)
             iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
 
