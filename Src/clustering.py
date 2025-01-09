@@ -153,7 +153,7 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         # if provided in param_grid
         if 'pca_components' in param_names:
             param_settings['pca_components'] = pcs
-        param_key = tuple(sorted(param_settings.values()))
+        param_key = tuple(param_settings.values())
         mean_wgss[param_key] = np.mean(iter_wgss)
         mean_silh_score[param_key] = np.mean(iter_silh_score)
         mean_neg_silh_score[param_key] = np.mean(iter_neg_silh_score)

@@ -29,7 +29,7 @@ def plot_metric_clusters(cluster_no, metric, iter_no, plot_title, xlabel, ylabel
 
     for i in range(plot_no):
         temp = {key[1]: val for key, val in metric.items() if key[0] == cluster_no[i]}
-        ax[i].plot(temp.keys(), temp.values())
+        ax[i].plot(temp.keys(), temp.values(), 'bx-')
         subplot_title = " ".join([str(cluster_no[i]), "clusters"])
         ax[i].set_title(subplot_title)
         ax[i].set_xlabel(xlabel)
