@@ -3,7 +3,7 @@ from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
 from itertools import product
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, silhouette_samples
 
 def find_label_alignement(reference, labels):
     """
@@ -120,6 +120,8 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     mean_wgss = {}
     # mean silhouette score for each parameter combination
     mean_silh_score = {}
+    # mean number of data points with a negative silhouette score
+    mean_neg_silh_score = {}
     
     # exstract the names of the parameters
     param_names = list(param_grid.keys())
@@ -127,23 +129,34 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     default_param_settings = {}
     if 'n_init' not in param_names:
         default_param_settings['n_init'] = 30
+    #the default number of principal components used in KMeans
+    no_PCS = 3
 
     # for all combinations of parameters (cartesian product of parameters' values)
     for values in product(*(param_grid[name] for name in param_names)):
         # produce a tuple of Kmeans parameters
         param_settings = dict(zip(param_names, values))
+        # extract the number of principal components from parameters
+        pcs = param_settings.pop('pca_components', no_PCS)
 
         iter_wgss = []
         iter_silh_score = []
+        iter_neg_silh_score = []
 
         for _ in range(iter_no):
-            kmeans = KMeans(**param_settings, **default_param_settings).fit(X_PCA)
+            kmeans = KMeans(**param_settings, **default_param_settings).fit(X_PCA[:, 0:pcs])
             iter_wgss.append(kmeans.inertia_)
             iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
-
+            iter_neg_silh_score.append(np.sum(silhouette_samples(X_PCA, kmeans.labels_) < 0))
+        
+        # reintroduce the number of principal components
+        # if provided in param_grid
+        if 'pca_components' in param_names:
+            param_settings['pca_components'] = pcs
         param_key = tuple(sorted(param_settings.values()))
         mean_wgss[param_key] = np.mean(iter_wgss)
         mean_silh_score[param_key] = np.mean(iter_silh_score)
+        mean_neg_silh_score[param_key] = np.mean(iter_neg_silh_score)
 
 
-    return (mean_wgss, mean_silh_score)
+    return (mean_wgss, mean_silh_score, mean_neg_silh_score)
