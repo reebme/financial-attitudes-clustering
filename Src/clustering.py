@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
+from itertools import product
 
 def find_label_alignement(reference, labels):
     """
@@ -95,3 +96,46 @@ def align_labels(clusters):
     # each effect of the clustering is in a row
     aligned_clusters = np.array(aligned_clusters)
     return aligned_clusters
+
+def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
+    """
+    Compute mean Within-Group Sum of Squares (WGSS) and silhouette scores for each KMeans parameter combination.
+
+    Parameters:
+    - X_PCA (array-like): PCA-transformed dataset.
+    - param_grid (dict): Dictionary of KMeans parameters and their possible values (list or iterable).
+    - iter_no (int, optional): Number of iterations to average the metrics over. Defaults to 1.
+
+    Returns:
+    - tuple: 
+        - mean_wgss (dict): Average WGSS for each parameter combination.
+        - mean_silh_score (dict): Average silhouette score for each parameter combination.
+
+    Notes:
+    The metrics key tuples are in the order provided by param_grid.
+    """
+    # mean WGSS for each parameter combination
+    mean_wgss = {}
+    # mean silhouette score for each parameter combination
+    mean_silh_score = {}
+    
+    # exstract the names of the parameters
+    param_names = list(param_grid.keys())
+    # for all combinations of parameters (cartesian product of parameters' values)
+    for values in product(*(param_grid[name] for name in param_names)):
+        # produce a tuple of Kmeans parameters
+        param_settings = dict(zip(param_names, values))
+
+        iter_wgss = []
+        iter_silh_score = []
+
+        for _ in range(N):
+            kmeans = KMeans(**param_settings).fit(X_PCA[:, 0:3])
+            iter_wgss.append(kmeans.inertia_)
+            iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
+
+        param_key = tuple(sorted(param_settings.values()))
+        mean_wgss[param_key] = np.mean(iter_wgss)
+        mean_silh_score[param_key] = np.mean(iter_silh_score)
+
+    return (mean_wgss, mean_silh_score)
