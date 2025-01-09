@@ -2,10 +2,6 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
 
-# Used to realign labels from clustering to compare clusters
-# When K-means is used for clustering, the same clusters can be differently labeled.
-# Clusters which align the most are labeled according to the reference.
-# reference and labels are each a vector of labels
 def find_label_alignement(reference, labels):
     """
     Align cluster labels to match a reference labeling.
