@@ -2,6 +2,8 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
 from itertools import product
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 def find_label_alignement(reference, labels):
     """
@@ -112,7 +114,7 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         - mean_silh_score (dict): Average silhouette score for each parameter combination.
 
     Notes:
-    The metrics key tuples are in the order provided by param_grid.
+    TODO, now it is sorted. The metrics key tuples are in the order provided by param_grid.
     """
     # mean WGSS for each parameter combination
     mean_wgss = {}
@@ -121,6 +123,11 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     
     # exstract the names of the parameters
     param_names = list(param_grid.keys())
+
+    default_param_settings = {}
+    if 'n_init' not in param_names:
+        default_param_settings['n_init'] = 30
+
     # for all combinations of parameters (cartesian product of parameters' values)
     for values in product(*(param_grid[name] for name in param_names)):
         # produce a tuple of Kmeans parameters
@@ -129,13 +136,14 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         iter_wgss = []
         iter_silh_score = []
 
-        for _ in range(N):
-            kmeans = KMeans(**param_settings).fit(X_PCA)
+        for _ in range(iter_no):
+            kmeans = KMeans(**param_settings, **default_param_settings).fit(X_PCA)
             iter_wgss.append(kmeans.inertia_)
             iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
 
         param_key = tuple(sorted(param_settings.values()))
         mean_wgss[param_key] = np.mean(iter_wgss)
         mean_silh_score[param_key] = np.mean(iter_silh_score)
+
 
     return (mean_wgss, mean_silh_score)
