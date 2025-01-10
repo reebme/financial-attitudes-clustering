@@ -120,7 +120,7 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     mean_wgss = {}
     # mean silhouette score for each parameter combination
     mean_silh_score = {}
-    # mean number of data points with a negative silhouette score
+    # mean fraction of data points with a negative silhouette score
     mean_neg_silh_score = {}
     
     # exstract the names of the parameters
@@ -131,6 +131,9 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         default_param_settings['n_init'] = 30
     #the default number of principal components used in KMeans
     no_PCS = 3
+
+    # extract the no of data points
+    no_data_points = X_PCA.shape[0]
 
     # for all combinations of parameters (cartesian product of parameters' values)
     for values in product(*(param_grid[name] for name in param_names)):
@@ -147,12 +150,13 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
             kmeans = KMeans(**param_settings, **default_param_settings).fit(X_PCA[:, 0:pcs])
             iter_wgss.append(kmeans.inertia_)
             iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
-            iter_neg_silh_score.append(np.sum(silhouette_samples(X_PCA, kmeans.labels_) < 0))
+            iter_neg_silh_score.append(np.sum(silhouette_samples(X_PCA, kmeans.labels_) < 0)/no_data_points)
         
         # reintroduce the number of principal components
         # if provided in param_grid
         if 'pca_components' in param_names:
             param_settings['pca_components'] = pcs
+
         param_key = tuple(param_settings.values())
         mean_wgss[param_key] = np.mean(iter_wgss)
         mean_silh_score[param_key] = np.mean(iter_silh_score)
