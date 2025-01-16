@@ -1,140 +1,140 @@
-Country Name,Country Code,3_clusters,4_clusters,5_clusters,6_clusters,7_clusters,8_clusters,9_clusters,10_clusters
-Afghanistan,AFG,0,1,1,0,2,6,2,2
-Albania,ALB,0,0,1,0,6,1,0,6
-Algeria,DZA,1,3,0,4,3,3,8,3
-Argentina,ARG,1,0,4,2,0,5,5,0
-Armenia,ARM,1,3,4,4,3,4,3,4
-Australia,AUS,2,2,3,3,1,7,6,1
-Austria,AUT,2,2,3,3,1,7,6,1
-Azerbaijan,AZE,0,0,1,0,6,1,0,6
-Bangladesh,BGD,0,1,1,0,2,6,2,2
-Belgium,BEL,2,2,3,1,5,0,1,5
-Benin,BEN,0,0,1,0,6,1,0,8
-Bolivia,BOL,1,0,4,2,0,5,5,0
-Bosnia and Herzegovina,BIH,1,3,0,4,3,4,3,4
-Botswana,BWA,0,1,2,5,4,2,7,7
-Brazil,BRA,0,0,1,0,6,1,0,6
-Bulgaria,BGR,1,3,0,4,3,4,3,4
-Burkina Faso,BFA,0,0,1,0,6,1,0,8
-Cambodia,KHM,0,0,1,0,6,1,0,8
-Cameroon,CMR,0,0,1,0,6,1,0,8
-Canada,CAN,2,2,3,1,5,7,6,1
-Chad,TCD,1,0,4,2,6,1,0,8
-Chile,CHL,1,0,4,2,0,5,5,6
-China,CHN,1,3,0,4,3,4,3,4
-Colombia,COL,0,0,1,0,6,1,0,8
-Comoros,COM,1,3,4,2,0,4,3,4
-"Congo, Dem. Rep.",COD,0,1,1,0,2,6,2,2
-"Congo, Rep.",COG,0,0,1,0,6,1,0,6
-Costa Rica,CRI,1,0,4,2,0,5,5,0
-Cote d'Ivoire,CIV,0,0,1,0,6,1,0,8
-Croatia,HRV,2,2,0,1,5,0,1,5
-Cyprus,CYP,1,0,4,2,0,5,5,6
-Czechia,CZE,2,2,0,1,5,0,1,5
-Denmark,DNK,2,2,3,3,1,7,4,9
-Dominican Republic,DOM,0,0,1,0,6,1,0,8
-Ecuador,ECU,0,0,1,0,6,1,0,8
-"Egypt, Arab Rep.",EGY,1,0,4,2,0,5,5,0
-El Salvador,SLV,1,0,4,2,0,5,5,6
-Estonia,EST,2,2,3,3,1,7,6,1
-Eswatini,SWZ,0,1,2,5,2,6,2,2
-Ethiopia,ETH,0,0,1,0,6,1,0,8
-Finland,FIN,2,2,3,3,1,7,6,1
-France,FRA,2,2,3,1,5,0,6,1
-Gabon,GAB,1,0,4,2,6,1,0,6
-"Gambia, The",GMB,0,1,2,5,4,2,7,7
-Georgia,GEO,0,1,1,0,2,6,2,2
-Germany,DEU,2,2,0,1,5,0,1,5
-Ghana,GHA,0,1,1,0,2,6,2,2
-Greece,GRC,1,0,4,2,0,5,5,0
-Guatemala,GTM,1,0,4,2,0,5,5,0
-Guinea,GIN,0,1,1,0,2,6,2,2
-Honduras,HND,0,0,1,0,6,1,0,6
-"Hong Kong SAR, China",HKG,2,3,0,1,5,0,1,5
-Hungary,HUN,2,2,0,1,5,0,1,5
-Iceland,ISL,2,2,3,3,1,7,6,1
-India,IND,0,1,1,0,2,6,2,2
-Indonesia,IDN,0,0,1,0,2,6,2,2
-"Iran, Islamic Rep.",IRN,1,0,4,2,0,5,5,0
-Iraq,IRQ,0,0,1,0,6,1,0,6
-Ireland,IRL,2,2,3,3,1,7,6,1
-Israel,ISR,2,2,3,1,5,0,6,1
-Italy,ITA,2,2,3,1,5,0,6,1
-Jamaica,JAM,1,0,4,2,0,4,3,6
-Japan,JPN,1,3,0,4,3,3,8,3
-Jordan,JOR,0,0,1,0,6,1,0,6
-Kazakhstan,KAZ,1,3,0,4,3,3,8,3
-Kenya,KEN,0,1,1,0,2,6,2,2
-"Korea, Rep.",KOR,1,3,0,4,3,3,8,3
-Kosovo,XKX,1,0,4,2,0,5,5,0
-Kyrgyz Republic,KGZ,1,3,0,4,3,3,8,3
-Lao PDR,LAO,0,0,1,0,6,1,0,6
-Latvia,LVA,2,2,0,1,5,0,1,5
-Lebanon,LBN,0,1,1,0,2,6,2,2
-Lesotho,LSO,0,1,2,5,4,2,7,7
-Liberia,LBR,0,1,2,5,4,2,7,7
-Lithuania,LTU,2,2,0,1,5,0,1,5
-Madagascar,MDG,0,1,1,0,2,6,2,2
-Malawi,MWI,0,1,2,5,4,2,7,7
-Malaysia,MYS,1,3,4,2,0,5,5,0
-Mali,MLI,0,1,2,5,4,2,7,7
-Malta,MLT,2,2,0,1,5,0,1,5
-Mauritania,MRT,0,0,1,0,6,1,0,8
-Mauritius,MUS,1,0,4,2,0,5,5,0
-Mexico,MEX,1,3,4,4,3,4,3,4
-Moldova,MDA,1,0,4,2,0,5,5,0
-Mongolia,MNG,1,0,4,2,0,5,5,0
-Morocco,MAR,0,0,1,2,6,1,0,8
-Mozambique,MOZ,0,1,2,5,2,6,2,2
-Myanmar,MMR,1,3,4,2,0,5,5,0
-Namibia,NAM,0,1,1,0,2,6,2,2
-Nepal,NPL,1,0,4,2,0,5,5,0
-Netherlands,NLD,2,2,3,3,1,7,6,1
-New Zealand,NZL,2,2,3,3,1,7,6,1
-Nicaragua,NIC,1,0,4,2,6,1,0,6
-Niger,NER,0,0,1,2,6,1,0,8
-Nigeria,NGA,0,1,1,0,2,6,2,2
-North Macedonia,MKD,1,3,4,2,0,4,3,4
-Norway,NOR,2,2,3,3,1,7,4,9
-Pakistan,PAK,0,0,1,0,6,1,0,8
-Panama,PAN,1,3,4,4,3,4,3,4
-Paraguay,PRY,1,0,4,2,0,5,5,0
-Peru,PER,0,0,1,0,6,1,0,8
-Philippines,PHL,0,0,1,0,6,1,0,8
-Poland,POL,1,3,4,4,3,4,3,4
-Portugal,PRT,1,3,4,4,3,4,3,4
-Romania,ROU,1,3,0,4,3,4,3,4
-Russian Federation,RUS,1,3,4,4,3,4,3,4
-Saudi Arabia,SAU,2,2,0,1,5,0,1,5
-Senegal,SEN,0,1,2,5,2,6,2,2
-Serbia,SRB,1,3,0,4,3,4,3,4
-Sierra Leone,SLE,0,1,2,5,4,2,7,7
-Singapore,SGP,1,3,4,4,3,3,8,3
-Slovak Republic,SVK,1,3,0,4,3,3,8,3
-Slovenia,SVN,2,2,0,1,5,0,1,5
-South Africa,ZAF,0,0,1,0,6,1,0,6
-South Sudan,SSD,0,1,2,5,4,2,7,7
-Spain,ESP,2,2,0,1,5,0,1,5
-Sri Lanka,LKA,1,0,4,2,0,5,5,0
-Sweden,SWE,2,2,3,3,1,7,4,9
-Switzerland,CHE,2,2,3,3,1,7,6,1
-"Taiwan, China",TWN,2,2,0,1,5,0,1,5
-Tajikistan,TJK,1,3,0,4,3,4,3,4
-Tanzania,TZA,0,0,1,0,6,1,0,8
-Thailand,THA,1,3,0,4,3,4,3,4
-Togo,TGO,1,0,4,2,6,1,0,8
-Tunisia,TUN,1,3,4,4,0,4,3,4
-Turkiye,TUR,0,0,1,0,6,1,0,8
-Uganda,UGA,0,1,1,0,2,6,2,2
-Ukraine,UKR,1,0,4,2,0,5,5,0
-United Arab Emirates,ARE,2,2,3,1,5,7,6,1
-United Kingdom,GBR,2,2,3,3,1,7,6,1
-United States,USA,2,2,0,1,5,0,1,5
-Uruguay,URY,1,3,0,4,3,4,3,4
-Uzbekistan,UZB,2,2,0,1,5,0,1,5
-"Venezuela, RB",VEN,0,1,1,0,2,6,2,2
-Vietnam,VNM,1,3,0,4,3,3,8,3
-West Bank and Gaza,PSE,1,0,4,2,0,5,5,0
-"Yemen, Rep.",YEM,1,0,4,2,0,5,5,0
-Zambia,ZMB,0,1,2,5,4,2,7,7
-Zimbabwe,ZWE,0,1,2,5,4,2,7,7
+,Country Name,Country Code,3_clusters,4_clusters,5_clusters,6_clusters,7_clusters,8_clusters,9_clusters,10_clusters
+0,Afghanistan,AFG,1,1,0,0,5,7,6,2
+1,Albania,ALB,1,3,0,0,1,6,1,5
+2,Algeria,DZA,0,0,1,5,0,5,7,9
+3,Argentina,ARG,0,3,2,2,4,0,4,3
+4,Armenia,ARM,0,0,2,5,0,4,0,6
+5,Australia,AUS,2,2,3,4,2,3,2,7
+6,Austria,AUT,2,2,3,4,2,3,2,7
+7,Azerbaijan,AZE,1,3,0,0,1,6,1,5
+8,Bangladesh,BGD,1,1,0,0,5,7,6,2
+9,Belgium,BEL,2,2,3,1,6,1,5,1
+10,Benin,BEN,1,3,0,0,1,6,1,0
+11,Bolivia,BOL,0,3,2,2,4,0,4,3
+12,Bosnia and Herzegovina,BIH,0,0,1,5,0,4,0,6
+13,Botswana,BWA,1,1,4,3,3,2,3,8
+14,Brazil,BRA,1,3,0,0,1,6,1,5
+15,Bulgaria,BGR,0,0,1,5,0,4,0,6
+16,Burkina Faso,BFA,1,3,0,0,1,6,1,0
+17,Cambodia,KHM,1,3,0,0,1,6,1,0
+18,Cameroon,CMR,1,3,0,0,1,6,1,0
+19,Canada,CAN,2,2,3,1,6,1,2,7
+20,Chad,TCD,0,3,2,2,1,6,1,0
+21,Chile,CHL,0,3,2,2,4,0,4,5
+22,China,CHN,0,0,1,5,0,4,0,6
+23,Colombia,COL,1,3,0,0,1,6,1,0
+24,Comoros,COM,0,0,2,2,4,4,0,6
+25,"Congo, Dem. Rep.",COD,1,1,0,0,5,7,6,2
+26,"Congo, Rep.",COG,1,3,0,0,1,6,1,5
+27,Costa Rica,CRI,0,3,2,2,4,0,4,3
+28,Cote d'Ivoire,CIV,1,3,0,0,1,6,1,0
+29,Croatia,HRV,2,2,1,1,6,1,5,1
+30,Cyprus,CYP,0,3,2,2,4,0,4,5
+31,Czechia,CZE,2,2,1,1,6,1,5,1
+32,Denmark,DNK,2,2,3,4,2,3,8,4
+33,Dominican Republic,DOM,1,3,0,0,1,6,1,0
+34,Ecuador,ECU,1,3,0,0,1,6,1,0
+35,"Egypt, Arab Rep.",EGY,0,3,2,2,4,0,4,3
+36,El Salvador,SLV,0,3,2,2,4,0,4,5
+37,Estonia,EST,2,2,3,4,2,3,2,7
+38,Eswatini,SWZ,1,1,4,3,5,7,6,2
+39,Ethiopia,ETH,1,3,0,0,1,6,1,0
+40,Finland,FIN,2,2,3,4,2,3,2,7
+41,France,FRA,2,2,3,1,6,1,2,7
+42,Gabon,GAB,0,3,2,2,1,6,1,5
+43,"Gambia, The",GMB,1,1,4,3,3,2,3,8
+44,Georgia,GEO,1,1,0,0,5,7,6,2
+45,Germany,DEU,2,2,1,1,6,1,5,1
+46,Ghana,GHA,1,1,0,0,5,7,6,2
+47,Greece,GRC,0,3,2,2,4,0,4,3
+48,Guatemala,GTM,0,3,2,2,4,0,4,3
+49,Guinea,GIN,1,1,0,0,5,7,6,2
+50,Honduras,HND,1,3,0,0,1,6,1,5
+51,"Hong Kong SAR, China",HKG,2,0,1,1,6,1,5,1
+52,Hungary,HUN,2,2,1,1,6,1,5,1
+53,Iceland,ISL,2,2,3,4,2,3,2,7
+54,India,IND,1,1,0,0,5,7,6,2
+55,Indonesia,IDN,1,3,0,0,5,7,6,0
+56,"Iran, Islamic Rep.",IRN,0,3,2,2,4,0,4,3
+57,Iraq,IRQ,1,3,0,0,1,6,1,5
+58,Ireland,IRL,2,2,3,4,2,3,2,7
+59,Israel,ISR,2,2,3,1,6,1,2,7
+60,Italy,ITA,2,2,3,1,6,1,2,7
+61,Jamaica,JAM,0,3,2,2,4,4,0,5
+62,Japan,JPN,0,0,1,5,0,5,7,9
+63,Jordan,JOR,1,3,0,0,1,6,1,5
+64,Kazakhstan,KAZ,0,0,1,5,0,5,7,9
+65,Kenya,KEN,1,1,0,0,5,7,6,2
+66,"Korea, Rep.",KOR,0,0,1,5,0,5,7,9
+67,Kosovo,XKX,0,3,2,2,4,0,4,3
+68,Kyrgyz Republic,KGZ,0,0,1,5,0,5,7,9
+69,Lao PDR,LAO,1,3,0,0,1,6,1,5
+70,Latvia,LVA,2,2,1,1,6,1,5,1
+71,Lebanon,LBN,1,1,0,0,5,7,6,2
+72,Lesotho,LSO,1,1,4,3,3,2,3,8
+73,Liberia,LBR,1,1,4,3,3,2,3,8
+74,Lithuania,LTU,2,2,1,1,6,1,5,1
+75,Madagascar,MDG,1,1,0,0,5,7,6,2
+76,Malawi,MWI,1,1,4,3,3,2,3,8
+77,Malaysia,MYS,0,0,2,2,4,0,4,3
+78,Mali,MLI,1,1,4,3,3,2,3,8
+79,Malta,MLT,2,2,1,1,6,1,5,1
+80,Mauritania,MRT,1,3,0,0,1,6,1,0
+81,Mauritius,MUS,0,3,2,2,4,0,4,3
+82,Mexico,MEX,0,0,2,5,0,4,0,6
+83,Moldova,MDA,0,3,2,2,4,0,4,3
+84,Mongolia,MNG,0,3,2,2,4,0,4,3
+85,Morocco,MAR,1,3,0,2,1,6,1,0
+86,Mozambique,MOZ,1,1,4,3,5,7,6,2
+87,Myanmar,MMR,0,0,2,2,4,0,4,3
+88,Namibia,NAM,1,1,0,0,5,7,6,2
+89,Nepal,NPL,0,3,2,2,4,0,4,3
+90,Netherlands,NLD,2,2,3,4,2,3,2,7
+91,New Zealand,NZL,2,2,3,4,2,3,2,7
+92,Nicaragua,NIC,0,3,2,2,1,6,1,5
+93,Niger,NER,1,3,0,2,1,6,1,0
+94,Nigeria,NGA,1,1,0,0,5,7,6,2
+95,North Macedonia,MKD,0,0,2,2,4,4,0,6
+96,Norway,NOR,2,2,3,4,2,3,8,4
+97,Pakistan,PAK,1,3,0,0,1,6,1,0
+98,Panama,PAN,0,0,2,5,0,4,0,6
+99,Paraguay,PRY,0,3,2,2,4,0,4,3
+100,Peru,PER,1,3,0,0,1,6,1,0
+101,Philippines,PHL,1,3,0,0,1,6,1,0
+102,Poland,POL,0,0,2,5,0,4,0,6
+103,Portugal,PRT,0,0,2,5,0,4,0,6
+104,Romania,ROU,0,0,1,5,0,4,0,6
+105,Russian Federation,RUS,0,0,2,5,0,4,0,6
+106,Saudi Arabia,SAU,2,2,1,1,6,1,5,1
+107,Senegal,SEN,1,1,4,3,5,7,6,2
+108,Serbia,SRB,0,0,1,5,0,4,0,6
+109,Sierra Leone,SLE,1,1,4,3,3,2,3,8
+110,Singapore,SGP,0,0,2,5,0,5,7,9
+111,Slovak Republic,SVK,0,0,1,5,0,5,7,9
+112,Slovenia,SVN,2,2,1,1,6,1,5,1
+113,South Africa,ZAF,1,3,0,0,1,6,1,5
+114,South Sudan,SSD,1,1,4,3,3,2,3,8
+115,Spain,ESP,2,2,1,1,6,1,5,1
+116,Sri Lanka,LKA,0,3,2,2,4,0,4,3
+117,Sweden,SWE,2,2,3,4,2,3,8,4
+118,Switzerland,CHE,2,2,3,4,2,3,2,7
+119,"Taiwan, China",TWN,2,2,1,1,6,1,5,1
+120,Tajikistan,TJK,0,0,1,5,0,4,0,6
+121,Tanzania,TZA,1,3,0,0,1,6,1,0
+122,Thailand,THA,0,0,1,5,0,4,0,6
+123,Togo,TGO,0,3,2,2,1,6,1,0
+124,Tunisia,TUN,0,0,2,5,0,4,0,6
+125,Turkiye,TUR,1,3,0,0,1,6,1,0
+126,Uganda,UGA,1,1,0,0,5,7,6,2
+127,Ukraine,UKR,0,3,2,2,4,0,4,3
+128,United Arab Emirates,ARE,2,2,3,1,6,1,2,7
+129,United Kingdom,GBR,2,2,3,4,2,3,2,7
+130,United States,USA,2,2,1,1,6,1,5,1
+131,Uruguay,URY,0,0,1,5,0,4,0,6
+132,Uzbekistan,UZB,2,2,1,1,6,1,5,1
+133,"Venezuela, RB",VEN,1,1,0,0,5,7,6,2
+134,Vietnam,VNM,0,0,1,5,0,5,7,9
+135,West Bank and Gaza,PSE,0,3,2,2,4,0,4,3
+136,"Yemen, Rep.",YEM,0,3,2,2,4,0,4,3
+137,Zambia,ZMB,1,1,4,3,3,2,3,8
+138,Zimbabwe,ZWE,1,1,4,3,3,2,3,8

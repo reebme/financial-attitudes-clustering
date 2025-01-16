@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 import geopandas as gpd
 from rapidfuzz import process, fuzz
 
@@ -39,72 +40,92 @@ def plot_metric_clusters(cluster_no, metric, iter_no, plot_title, xlabel, ylabel
         ax[i].grid(True)
 
 def align_country_codes(
-    countries_labels,
-    world_shapefile_path,
-    country_code_col = "Country Code",
-    fuzzy_threshold = 60):
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    df1_code_col: str,
+    df1_name_col: str,
+    df2_code_col: str,
+    df2_name_col: str,
+    updated_code_col: str = "Updated Country Code",
+    fuzzy_threshold: int = 60):
     """
-    Aligns custom country codes in `countries_labels` with the shapefile's SOV_A3 codes.
-    If no direct match is found, attempts fuzzy matching on the country name.
-
+    Aligns country codes in df1 with codes from df2.
+    Uses direct code matching first, and falls back to fuzzy matching on the
+    name columns if direct match is not found in df2.
+    
     Parameters:
-    - countries_labels : pd.DataFrame
-        DataFrame containing at least:
-          - index representing country names (e.g., 'France')
-          - a column with the code which is to be aligned, e.g., 'Country Code'
-    - world_shapefile_path : str
-        Path to the .shp file for the world shapefile
-    - country_code_col : str, optional
-        Column in `countries_labels` that holds initial codes
+    - df1 : pd.DataFrame
+        The primary DataFrame whose code column is updated.
+    Must contain:
+          - df1_code_col
+          - df1_name_col
+    - df2 : pd.DataFrame
+        The secondary DataFrame that contains the desired codes.
+        Must contain:
+          - df2_code_col
+          - df2_name_col
+    - df1_code_col : str
+        Name of the column in df1 that holds the initial codes.
+    - df1_name_col : str
+        Name of the column in df1 that holds the country names (for fuzzy matching).
+    - df2_code_col : str
+        Name of the column in df2 that holds the codes.
+    - df2_name_col : str
+        Name of the column in df2 that holds the country names (for fuzzy matching).
+    - updated_code_col : str, optional
+        Name of the new column in df1 that will store the updated codes.
+        Defaults to "Updated Country Code".
     - fuzzy_threshold : int, optional
-        Minimum fuzzy ratio to accept a match when direct code lookup fails, between 0 and 100
+        Minimum fuzzy ratio to accept a match when direct code lookup fails,
+        between 0 and 100. Defaults to 60.
 
     Returns:
-    - updated_countries_labels : pd.DataFrame
-        The same DataFrame with an additional column, e.g. "World Country Code"
     - changed_codes : list of tuples
-        List of (country_name, old_code, new_country_name, new_code) for any row that was changed
+        List of (df1_country_name, old_code, matched_country_name, matched_code)
+        for each row where the code was changed.
     """
-    # Load the world shapefile
-    world = gpd.GeoDataFrame.from_file(world_shapefile_path)
 
-    # Create a new column for SOV_A3 codes (copy from country_code_col).
-    world_code_col = "World Country Code"
-    countries_labels[world_code_col] = countries_labels[country_code_col].copy()
+    # Initialize the updated code column
+    df1[updated_code_col] = df1[df1_code_col].copy()
 
-    changed_codes = []  # Keep track of any changes
+    # Keep track of changes
+    changed_codes = []
 
-    for country in countries_labels.index:
-        my_code = countries_labels.loc[country][country_code_col]
-        #my_data = " ".join(["My data:", my_code, country])
-        
-        # Check if SOV_A3 in shapefile matches my_code directly
-        world_data_exists = world["SOV_A3"] == my_code
-        
-        #if world_data_exists.sum() == 1:
-        #    world_data_entry = world[world_data_exists]
-        #    world_data = " ".join(["World data:", world_data_entry["SOV_A3"].iloc[0], world_data_entry["NAME"].iloc[0]])
-        #    print(world_data)
-        if world_data_exists.sum() == 0:
+    # Iterate through rows of df1 by index
+    for idx in df1.index:
+        df1_code = df1.at[idx, df1_code_col]
+        df1_name = df1.at[idx, df1_name_col]
+
+        code_data_exists = df2[df2_code_col] == df1_code
+
+        if code_data_exists.sum() == 0:
+            # Fuzzy match fallback on country name
             best_match = process.extractOne(
-                query = country,
-                choices = world['NAME'],
+                query = df1_name,
+                choices = df2[df2_name_col],
                 scorer = fuzz.ratio,
-                score_cutoff=fuzzy_threshold,
+                score_cutoff = fuzzy_threshold,
             )
-            #print(my_data)
             if best_match:
-                # best_match = (matched_name, score, index_in_world)
-                world_code = world.iloc[best_match[2]]["SOV_A3"]
-                world_country_name = world.iloc[best_match[2]]["NAME"]
-                changed_codes.append((country, my_code, world_country_name, world_code))
-                countries_labels.loc[country, world_code_col] = world_code
+                # best_match => (matched_name, score, matched_index)
+                matched_index = best_match[2]
+                matched_name = df2.iloc[matched_index][df2_name_col]
+                matched_code = df2.iloc[matched_index][df2_code_col]
 
-    return countries_labels, changed_codes
+                # Record the change
+                changed_codes.append(
+                    (df1_name, df1_code, matched_name, matched_code)
+                )
+
+                # Update df1 with the matched code
+                df1.at[idx, updated_code_col] = matched_code
+
+    return changed_codes
 
 def plot_choropleth_map(
     countries_labels,
     world_shapefile_path,
+    merge_column : str,
     cluster_column,
     output_filename="world_map.png",
 ):
@@ -114,10 +135,12 @@ def plot_choropleth_map(
     Parameters
     - countries_labels : pd.DataFrame
         Must have at least:
-          - "World Country Code" column: the aligned SOV_A3 codes
+          - merge_column: the aligned SOV_A3 codes
           - The `cluster_column` containing the values to visualize
     - world_shapefile_path : str
         Path to the .shp file for the world shapefile
+    - merge_column: str
+        Column from countries_labels to merge on (right_on).
     - cluster_column : str
         The name of the column in `countries_labels` with clustering information
     - output_filename : str, optional
@@ -134,7 +157,7 @@ def plot_choropleth_map(
         countries_labels,
         how="left",
         left_on="SOV_A3",
-        right_on="World Country Code"
+        right_on = merge_column,
     )
 
     # Create the plot
