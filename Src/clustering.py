@@ -4,6 +4,7 @@ from scipy.optimize import linear_sum_assignment
 from itertools import product
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, silhouette_samples
+from scipy.stats import mode
 
 def find_label_alignement(reference, labels):
     """
@@ -112,9 +113,9 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     - tuple: 
         - mean_wgss (dict): Average WGSS for each parameter combination.
         - mean_silh_score (dict): Average silhouette score for each parameter combination.
-
-    Notes:
-    TODO, now it is sorted. The metrics key tuples are in the order provided by param_grid.
+        - mean_neg_silh_score (dict): Average fraction of samples with a negative silhouette score
+                                        for each parameter combination.
+        - labels (dict): Clustering labels for each parameter combination.
     """
     # mean WGSS for each parameter combination
     mean_wgss = {}
@@ -122,6 +123,8 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
     mean_silh_score = {}
     # mean fraction of data points with a negative silhouette score
     mean_neg_silh_score = {}
+    # clustering labels for each parameter combination
+    labels = {}
     
     # exstract the names of the parameters
     param_names = list(param_grid.keys())
@@ -146,11 +149,14 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         iter_silh_score = []
         iter_neg_silh_score = []
 
+        iter_labels = []
+
         for _ in range(iter_no):
             kmeans = KMeans(**param_settings, **default_param_settings).fit(X_PCA[:, 0:pcs])
             iter_wgss.append(kmeans.inertia_)
             iter_silh_score.append(silhouette_score(X_PCA, kmeans.labels_))
             iter_neg_silh_score.append(np.sum(silhouette_samples(X_PCA, kmeans.labels_) < 0)/no_data_points)
+            iter_labels.append(kmeans.labels_)
         
         # reintroduce the number of principal components
         # if provided in param_grid
@@ -162,5 +168,27 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         mean_silh_score[param_key] = np.mean(iter_silh_score)
         mean_neg_silh_score[param_key] = np.mean(iter_neg_silh_score)
 
+        # handle labels
+        # each row represents a clustering iteration
+        aligned_labels = align_labels(iter_labels)
+        
+        if np.all(aligned_labels[0, :] == aligned_labels):
+            # if the labels are the same return them
+            # print("All labeled the same.")
+            labels[param_key] = aligned_labels[0,:]
+        else:
+            # if the labels differ return the most frequent ones
+            # TODO substitute with consesus clustering
+            # or add a possibility of consesus lustering through a parameter
+            # print(param key)
+            # print("There are differences in labeling.")
+            labels[param_key], counts = mode(aligned_labels, axis=0)
+        
+        # TODO add a frequency matrix
+        # frequency of labeling matrix
+        # label_freq_arr = np.zeros((aligned_clusters.shape[1], K))
+        # for l in range(K):
+        #    label_freq_arr[:, l] = np.sum(aligned_clusters == l, axis = 0).T
+        # label_freq[K] = label_freq_arr/N
 
-    return (mean_wgss, mean_silh_score, mean_neg_silh_score)
+    return (mean_wgss, mean_silh_score, mean_neg_silh_score, labels)
