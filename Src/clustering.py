@@ -171,24 +171,27 @@ def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
         # handle labels
         # each row represents a clustering iteration
         aligned_labels = align_labels(iter_labels)
+
+        # return aligned labels matrix for now
+        labels[param_key] = aligned_labels
         
-        if np.all(aligned_labels[0, :] == aligned_labels):
-            # if the labels are the same return them
-            # print("All labeled the same.")
-            labels[param_key] = aligned_labels[0,:]
-        else:
-            # if the labels differ return the most frequent ones
-            # TODO substitute with consesus clustering
-            # or add a possibility of consesus lustering through a parameter
-            # print(param key)
-            # print("There are differences in labeling.")
-            labels[param_key], counts = mode(aligned_labels, axis=0)
-        
-        # TODO add a frequency matrix
-        # frequency of labeling matrix
-        # label_freq_arr = np.zeros((aligned_clusters.shape[1], K))
-        # for l in range(K):
-        #    label_freq_arr[:, l] = np.sum(aligned_clusters == l, axis = 0).T
-        # label_freq[K] = label_freq_arr/N
+#        if np.all(aligned_labels[0, :] == aligned_labels):
+#            # if the labels are the same return them
+#            # print("All labeled the same.")
+#            labels[param_key] = aligned_labels[0,:]
+#        else:
+#            # if the labels differ return the most frequent ones
+#            # TODO substitute with consesus clustering
+#            # or add a possibility of consesus lustering through a parameter
+#            # print(param key)
+#            # print("There are differences in labeling.")
+#            labels[param_key], counts = mode(aligned_labels, axis=0)
+#        
+#        # TODO add a frequency matrix
+#        # frequency of labeling matrix
+#        # label_freq_arr = np.zeros((aligned_clusters.shape[1], K))
+#        # for l in range(K):
+#        #    label_freq_arr[:, l] = np.sum(aligned_clusters == l, axis = 0).T
+#        # label_freq[K] = label_freq_arr/N
 
     return (mean_wgss, mean_silh_score, mean_neg_silh_score, labels)
