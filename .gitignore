@@ -4,3 +4,13 @@
 # Python files
 *.pyc
 __pycache__/
+
+# local DB configuration
+config_local.py
+
+# generated results
+Results/
+
+# data
+Data/Processed/
+Data/Raw/
