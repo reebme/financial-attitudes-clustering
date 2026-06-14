@@ -1,50 +1,23 @@
-#  Linking Financial Mindsets to National Income and Democratic Health: A Clustering Approach
+#  Linking Financial Mindsets and Behaviors to National Income and Democracy Index: A Clustering Approach
 
 ## Project Overview
-This project explores the relationship between financial mindsets and macroeconomic indicators such as income levels and democracy classifications using the World Bank's Findex database.
+This project explores the relationship between financial mindsets, behaviors and macroeconomic indicators such as income levels and democracy classifications using the World Bank's Findex database.
 
 ## Objectives
 - To cluster countries based on financial attitudes and behaviors.
 - To compare these clusters with World Bank income classifications and democracy indices.
 
 ## Repository Structure
-- `Data/Processed`: Preprocessed datasets used for further analysis.
 - `Notebooks/`: Jupyter notebooks for each analysis step.
 - `Src/`: Python scripts for data preprocessing and analysis helpers.
-- `Results/`: Generated figures, tables, and final cluster assignments.
-
-## Data Sources
-- [World Bank Global Financial Inclusion Database](https://databank.worldbank.org/source/global-financial-inclusion)
-- [World Bank Income Classification](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups)
-- [Democracy Index](https://www.eiu.com/topic/democracy-index)
 
 ## Data Setup
-1. Download the World Bank data from the Global Financial Inclusion Database. The specific variables and their division into files utilized in this project are listed below.
-2. Place the downloaded files in the "Data/" directory.
-
-## Data Description
-
-### Data Processing
-
-The raw data was cleaned and processed as follows:
-1. Eliminated rows that lacked a country name or a series code.
-2. Ordered the data to cluster related series together.
-3. Transformed the data by indexing it with country names. The columns represent series codes, and the values correspond to the most recent survey wave for each series.
-4. Removed all rows (excluded all countries) with no data available.
-5. Removed all columns that had more than 50% missing values. This step excluded data related to rural/urban stratification.
-6. Missing values were imputed using appropriate aggregate values for each column.
-
-### Processed Data
-The cleaned and processed data has been exported to a CSV file and is stored in the `Data/Processed/` directory.
+1. Data is downloaded from [Data360](https://data360.worldbank.org/en/dataset/WB_FINDEX)
+2. Downloaded data is processed in the [repository](https://github.com/reebme/curated-data-sqlite)
+3. The resulting countries.db is used as data source and downloaded raw DB is occasionally used for validation
 
 ### Global Financial Inclusion Database (Global Findex Database)
-
-The Global Findex database provides comprehensive data on financial attitudes and behaviours across countries.
-
-For the purpose of this project, a subset of the data was analyzed. The file `worried_data.csv` contains information about the percentage of the population worried about day-to-day expenses, educational expenses, and having money for old age.
-
-For this project, the following variables were utilized:
-- worried_data.csv
+For notebooks 01-04 the following variables no longer available in the Findex DB were utilized for clustering:
 
 | Series Code                | Series Name                                                    |
 |------------------------------|----------------------------------------------------------------|
@@ -204,3 +177,11 @@ For this project, the following variables were utilized:
 | fin44a1.d.10 | Worried about not having enough money for old age: very worried, urban (% age 15+) |
 | fin44a1.d.3 | Worried about not having enough money for old age: very worried, young (% ages 15-24) |
 
+#### Data Processing
+The raw data was cleaned and processed as follows:
+1. Eliminated rows that lacked a country name or a series code.
+2. Ordered the data to cluster related series together.
+3. Transformed the data by indexing it with country names. The columns represent series codes, and the values correspond to the most recent survey wave for each series.
+4. Removed all rows (excluded all countries) with no data available.
+5. Removed all columns that had more than 50% missing values. This step excluded data related to rural/urban stratification.
+6. Missing values were imputed using appropriate aggregate values for each column.
