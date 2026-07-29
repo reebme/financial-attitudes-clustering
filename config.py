@@ -16,3 +16,8 @@ try:
     from config_local import DB_PATH
 except ImportError:
     pass
+
+try:
+    from config_local import DATA360_DB_PATH
+except ImportError:
+    pass
