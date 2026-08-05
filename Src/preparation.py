@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
 
-def import_bicliques(processed_data_file, bicliques_file):
+from sklearn.preprocessing import StandardScaler
+
+def import_bicliques(processed_data_file, bicliques_file, standardized=False):
     '''
     processed_data_file contains the original data with missingness
     it's a pandas dataframe written into a parquet file
@@ -19,6 +21,10 @@ def import_bicliques(processed_data_file, bicliques_file):
     )
 
     data = pd.read_parquet(processed_data_file)
+
+    if standardized:
+        scaler = StandardScaler().set_output(transform="pandas")
+        data = scaler.fit_transform(data)
 
     complete_data = []
     for _, bc in bicliques.iterrows():
