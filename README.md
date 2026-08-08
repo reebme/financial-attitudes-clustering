@@ -1,187 +1,53 @@
-#  Linking Financial Mindsets and Behaviors to National Income and Democracy Index: A Clustering Approach
+# Finding Global Financial Inclusion Patterns in Incomplete Data
+It uses The Global Findex Database, a source of data on how adults around the world access and use financial services, to discover if there is a plausible grouping of countries based on available indicators.
 
-## Project Overview
-This project explores the relationship between financial mindsets, behaviors and macroeconomic indicators such as income levels and democracy classifications using the World Bank's Findex database.
+Wave 5 data is used.
+## Project objective
+Given the dataset's missigness, ranging from 9% in wave 3 to 42% in wave 5, the project tries to discover the structure of the data in wave 5, using unsupervised clustering.
 
-## Objectives
-- To cluster countries based on financial attitudes and behaviors.
-- To compare these clusters with World Bank income classifications and democracy indices.
+The aim is to use available data without imputation.
+## Method overview
+Values reported as zero are treated as missing because of their [documented ambiguity](https://medium.com/@embeer/world-bank-data-suggests-0-of-australians-have-a-credit-card-obviously-false-a4d34dafacdf). Preprocessing involves scaling. Data in findex is survey and it is reported as percentages but the values are either fractions (0,1) or integers (0, 100).
 
-## Repository Structure
-- `Notebooks/`: Jupyter notebooks for each analysis step.
-- `Src/`: Python scripts for data preprocessing and analysis helpers.
+The dataset from wave 5 is treated as a feature matrix with countries as rows and indicators as columns. This creates 140 x 280 matrix with 42% missingness.
 
-## Data Setup
-1. Data is downloaded from [Data360](https://data360.worldbank.org/en/dataset/WB_FINDEX)
-2. Downloaded data is processed in the [repository](https://github.com/reebme/curated-data-sqlite)
-3. The resulting countries.db is used as data source and downloaded raw DB is occasionally used for validation
+Each indicator in the Findex DB has a [base value stored with up to 11 indicator values denoting stratification and one optional denominator information indicator](https://medium.com/@embeer/i-asked-ai-what-percentage-of-women-pay-bills-worldwide-1348144642bf). This project uses base values. Even though stratification provides relevant and potentially country differentiating information, it is not included to avoid having to account for groups of indicators with correlation close to 1.
 
-### Global Financial Inclusion Database (Global Findex Database)
-For notebooks 01-04 the following variables no longer available in the Findex DB were utilized for clustering:
+The 140 x 280 feature matrix is used to discover submatrices without missing data. This is akin to tiling idea, even though tiles are not exhaustively enumerated, but a subset of tiles is discovered using randomized algorithm and then used. Those submatrices are then clustered using k-means. Clustering information from all the submatrices is combined into a consensus matrix. It is then clustered using aglomerative clustering, thus combining the clustering results from each separate dataset subset into one global result. This creates one final clustering for 140 countries.
+## Main results
+### The missingness in the dataset is structured
+The Global Findex Database 2025: Connectivity and Financial Inclusion in the Digital Economy:
+> Unlike what was the case in previous editions, data collection for The Global Findex 2025 gave priority to low- and middle-income economies. Data on mobile phone ownership, internet use, and account ownership were collected in all economies, but questions on financial use and financial health were asked only in low- and middle-income economies. In addition, in Algeria, China, the Islamic Republic of Iran, Libya, Mauritius, the Russian Federation, and Ukraine, an abridged form of the questionnaire was administered by phone because of economy-specific restrictions.
 
-| Series Code                | Series Name                                                    |
-|------------------------------|----------------------------------------------------------------|
-| fin44b3.d | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all (% age 15+) |
-| fin44b3.d.1 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, female (% age 15+) |
-| fin44b3.d.12 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, in labor force (% age 15+) |
-| fin44b3.d.7 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, income, poorest 40% (% ages 15+) |
-| fin44b3.d.8 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, income, richest 60% (% ages 15+) |
-| fin44b3.d.2 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, male (% age 15+) |
-| fin44b3.d.4 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, older (% age 25+) |
-| fin44b3.d.11 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, out of labor force (% age 15+) |
-| fin44b3.d.5 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, primary education or less (% ages 15+) |
-| fin44b3.d.9 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, rural (% age 15+) |
-| fin44b3.d.6 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, secondary education or more (% ages 15+) |
-| fin44b3.d.10 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, urban (% age 15+) |
-| fin44b3.d.3 | Worried about not being able to pay for medical costs in case of a serious illness or accident: not worried at all, young (% ages 15-24) |
-| fin44b2.d | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried (% age 15+) |
-| fin44b2.d.1 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, female (% age 15+) |
-| fin44b2.d.12 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, in labor force (% age 15+) |
-| fin44b2.d.7 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, income, poorest 40% (% ages 15+) |
-| fin44b2.d.8 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, income, richest 60% (% ages 15+) |
-| fin44b2.d.2 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, male (% age 15+) |
-| fin44b2.d.4 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, older (% age 25+) |
-| fin44b2.d.11 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, out of labor force (% age 15+) |
-| fin44b2.d.5 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, primary education or less (% ages 15+) |
-| fin44b2.d.9 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, rural (% age 15+) |
-| fin44b2.d.6 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, secondary education or more (% ages 15+) |
-| fin44b2.d.10 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, urban (% age 15+) |
-| fin44b2.d.3 | Worried about not being able to pay for medical costs in case of a serious illness or accident: somewhat worried, young (% ages 15-24) |
-| fin44b1.d | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried (% age 15+) |
-| fin44b1.d.1 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, female (% age 15+) |
-| fin44b1.d.12 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, in labor force (% age 15+) |
-| fin44b1.d.7 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, income, poorest 40% (% ages 15+) |
-| fin44b1.d.8 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, income, richest 60% (% ages 15+) |
-| fin44b1.d.2 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, male (% age 15+) |
-| fin44b1.d.4 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, older (% age 25+) |
-| fin44b1.d.11 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, out of labor force (% age 15+) |
-| fin44b1.d.5 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, primary education or less (% ages 15+) |
-| fin44b1.d.9 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, rural (% age 15+) |
-| fin44b1.d.6 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, secondary education or more (% ages 15+) |
-| fin44b1.d.10 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, urban (% age 15+) |
-| fin44b1.d.3 | Worried about not being able to pay for medical costs in case of a serious illness or accident: very worried, young (% ages 15-24) |
-| fin44d3.d | Worried about not being able to pay school fees or fees for education: not worried at all (% age 15+) |
-| fin44d3.d.1 | Worried about not being able to pay school fees or fees for education: not worried at all, female (% age 15+) |
-| fin44d3.d.12 | Worried about not being able to pay school fees or fees for education: not worried at all, in labor force (% age 15+) |
-| fin44d3.d.7 | Worried about not being able to pay school fees or fees for education: not worried at all, income, poorest 40% (% ages 15+) |
-| fin44d3.d.8 | Worried about not being able to pay school fees or fees for education: not worried at all, income, richest 60% (% ages 15+) |
-| fin44d3.d.2 | Worried about not being able to pay school fees or fees for education: not worried at all, male (% age 15+) |
-| fin44d3.d.4 | Worried about not being able to pay school fees or fees for education: not worried at all, older (% age 25+) |
-| fin44d3.d.11 | Worried about not being able to pay school fees or fees for education: not worried at all, out of labor force (% age 15+) |
-| fin44d3.d.5 | Worried about not being able to pay school fees or fees for education: not worried at all, primary education or less (% ages 15+) |
-| fin44d3.d.9 | Worried about not being able to pay school fees or fees for education: not worried at all, rural (% age 15+) |
-| fin44d3.d.6 | Worried about not being able to pay school fees or fees for education: not worried at all, secondary education or more (% ages 15+) |
-| fin44d3.d.10 | Worried about not being able to pay school fees or fees for education: not worried at all, urban (% age 15+) |
-| fin44d3.d.3 | Worried about not being able to pay school fees or fees for education: not worried at all, young (% ages 15-24) |
-| fin44d2.d | Worried about not being able to pay school fees or fees for education: somewhat worried (% age 15+) |
-| fin44d2.d.1 | Worried about not being able to pay school fees or fees for education: somewhat worried, female (% age 15+) |
-| fin44d2.d.12 | Worried about not being able to pay school fees or fees for education: somewhat worried, in labor force (% age 15+) |
-| fin44d2.d.7 | Worried about not being able to pay school fees or fees for education: somewhat worried, income, poorest 40% (% ages 15+) |
-| fin44d2.d.8 | Worried about not being able to pay school fees or fees for education: somewhat worried, income, richest 60% (% ages 15+) |
-| fin44d2.d.2 | Worried about not being able to pay school fees or fees for education: somewhat worried, male (% age 15+) |
-| fin44d2.d.4 | Worried about not being able to pay school fees or fees for education: somewhat worried, older (% age 25+) |
-| fin44d2.d.11 | Worried about not being able to pay school fees or fees for education: somewhat worried, out of labor force (% age 15+) |
-| fin44d2.d.5 | Worried about not being able to pay school fees or fees for education: somewhat worried, primary education or less (% ages 15+) |
-| fin44d2.d.9 | Worried about not being able to pay school fees or fees for education: somewhat worried, rural (% age 15+) |
-| fin44d2.d.6 | Worried about not being able to pay school fees or fees for education: somewhat worried, secondary education or more (% ages 15+) |
-| fin44d2.d.10 | Worried about not being able to pay school fees or fees for education: somewhat worried, urban (% age 15+) |
-| fin44d2.d.3 | Worried about not being able to pay school fees or fees for education: somewhat worried, young (% ages 15-24) |
-| fin44d1.d | Worried about not being able to pay school fees or fees for education: very worried (% age 15+) |
-| fin44d1.d.1 | Worried about not being able to pay school fees or fees for education: very worried, female (% age 15+) |
-| fin44d1.d.12 | Worried about not being able to pay school fees or fees for education: very worried, in labor force (% age 15+) |
-| fin44d1.d.7 | Worried about not being able to pay school fees or fees for education: very worried, income, poorest 40% (% ages 15+) |
-| fin44d1.d.8 | Worried about not being able to pay school fees or fees for education: very worried, income, richest 60% (% ages 15+) |
-| fin44d1.d.2 | Worried about not being able to pay school fees or fees for education: very worried, male (% age 15+) |
-| fin44d1.d.4 | Worried about not being able to pay school fees or fees for education: very worried, older (% age 25+) |
-| fin44d1.d.11 | Worried about not being able to pay school fees or fees for education: very worried, out of labor force (% age 15+) |
-| fin44d1.d.5 | Worried about not being able to pay school fees or fees for education: very worried, primary education or less (% ages 15+) |
-| fin44d1.d.9 | Worried about not being able to pay school fees or fees for education: very worried, rural (% age 15+) |
-| fin44d1.d.6 | Worried about not being able to pay school fees or fees for education: very worried, secondary education or more (% ages 15+) |
-| fin44d1.d.10 | Worried about not being able to pay school fees or fees for education: very worried, urban (% age 15+) |
-| fin44d1.d.3 | Worried about not being able to pay school fees or fees for education: very worried, young (% ages 15-24) |
-| fin44c3.d | Worried about not having enough money for monthly expenses or bills: not worried at all (% age 15+) |
-| fin44c3.d.1 | Worried about not having enough money for monthly expenses or bills: not worried at all, female (% age 15+) |
-| fin44c3.d.12 | Worried about not having enough money for monthly expenses or bills: not worried at all, in labor force (% age 15+) |
-| fin44c3.d.7 | Worried about not having enough money for monthly expenses or bills: not worried at all, income, poorest 40% (% ages 15+) |
-| fin44c3.d.8 | Worried about not having enough money for monthly expenses or bills: not worried at all, income, richest 60% (% ages 15+) |
-| fin44c3.d.2 | Worried about not having enough money for monthly expenses or bills: not worried at all, male (% age 15+) |
-| fin44c3.d.4 | Worried about not having enough money for monthly expenses or bills: not worried at all, older (% age 25+) |
-| fin44c3.d.11 | Worried about not having enough money for monthly expenses or bills: not worried at all, out of labor force (% age 15+) |
-| fin44c3.d.5 | Worried about not having enough money for monthly expenses or bills: not worried at all, primary education or less (% ages 15+) |
-| fin44c3.d.9 | Worried about not having enough money for monthly expenses or bills: not worried at all, rural (% age 15+) |
-| fin44c3.d.10 | Worried about not having enough money for monthly expenses or bills: not worried at all, urban (% age 15+) |
-| fin44c3.d.3 | Worried about not having enough money for monthly expenses or bills: not worried at all, young (% ages 15-24) |
-| fin44c2.d | Worried about not having enough money for monthly expenses or bills: somewhat worried (% age 15+) |
-| fin44c2.d.1 | Worried about not having enough money for monthly expenses or bills: somewhat worried, female (% age 15+) |
-| fin44c2.d.12 | Worried about not having enough money for monthly expenses or bills: somewhat worried, in labor force (% age 15+) |
-| fin44c2.d.7 | Worried about not having enough money for monthly expenses or bills: somewhat worried, income, poorest 40% (% ages 15+) |
-| fin44c2.d.8 | Worried about not having enough money for monthly expenses or bills: somewhat worried, income, richest 60% (% ages 15+) |
-| fin44c2.d.2 | Worried about not having enough money for monthly expenses or bills: somewhat worried, male (% age 15+) |
-| fin44c2.d.4 | Worried about not having enough money for monthly expenses or bills: somewhat worried, older (% age 25+) |
-| fin44c2.d.11 | Worried about not having enough money for monthly expenses or bills: somewhat worried, out of labor force (% age 15+) |
-| fin44c2.d.5 | Worried about not having enough money for monthly expenses or bills: somewhat worried, primary education or less (% ages 15+) |
-| fin44c2.d.9 | Worried about not having enough money for monthly expenses or bills: somewhat worried, rural (% age 15+) |
-| fin44c2.d.6 | Worried about not having enough money for monthly expenses or bills: somewhat worried, secondary education or more (% ages 15+) |
-| fin44c2.d.10 | Worried about not having enough money for monthly expenses or bills: somewhat worried, urban (% age 15+) |
-| fin44c2.d.3 | Worried about not having enough money for monthly expenses or bills: somewhat worried, young (% ages 15-24) |
-| fin44c1.d | Worried about not having enough money for monthly expenses or bills: very worried (% age 15+) |
-| fin44c1.d.1 | Worried about not having enough money for monthly expenses or bills: very worried, female (% age 15+) |
-| fin44c1.d.12 | Worried about not having enough money for monthly expenses or bills: very worried, in labor force (% age 15+) |
-| fin44c1.d.7 | Worried about not having enough money for monthly expenses or bills: very worried, income, poorest 40% (% ages 15+) |
-| fin44c1.d.8 | Worried about not having enough money for monthly expenses or bills: very worried, income, richest 60% (% ages 15+) |
-| fin44c1.d.2 | Worried about not having enough money for monthly expenses or bills: very worried, male (% age 15+) |
-| fin44c1.d.4 | Worried about not having enough money for monthly expenses or bills: very worried, older (% age 25+) |
-| fin44c1.d.11 | Worried about not having enough money for monthly expenses or bills: very worried, out of labor force (% age 15+) |
-| fin44c1.d.5 | Worried about not having enough money for monthly expenses or bills: very worried, primary education or less (% ages 15+) |
-| fin44c1.d.9 | Worried about not having enough money for monthly expenses or bills: very worried, rural (% age 15+) |
-| fin44c1.d.6 | Worried about not having enough money for monthly expenses or bills: very worried, secondary education or more (% ages 15+) |
-| fin44c1.d.10 | Worried about not having enough money for monthly expenses or bills: very worried, urban (% age 15+) |
-| fin44c1.d.3 | Worried about not having enough money for monthly expenses or bills: very worried, young (% ages 15-24) |
-| fin44a3.d | Worried about not having enough money for old age: not worried at all (% age 15+) |
-| fin44a3.d.1 | Worried about not having enough money for old age: not worried at all, female (% age 15+) |
-| fin44a3.d.12 | Worried about not having enough money for old age: not worried at all, in labor force (% age 15+) |
-| fin44a3.d.7 | Worried about not having enough money for old age: not worried at all, income, poorest 40% (% ages 15+) |
-| fin44a3.d.8 | Worried about not having enough money for old age: not worried at all, income, richest 60% (% ages 15+) |
-| fin44a3.d.2 | Worried about not having enough money for old age: not worried at all, male (% age 15+) |
-| fin44a3.d.4 | Worried about not having enough money for old age: not worried at all, older (% age 25+) |
-| fin44a3.d.11 | Worried about not having enough money for old age: not worried at all, out of labor force (% age 15+) |
-| fin44a3.d.5 | Worried about not having enough money for old age: not worried at all, primary education or less (% ages 15+) |
-| fin44a3.d.9 | Worried about not having enough money for old age: not worried at all, rural (% age 15+) |
-| fin44a3.d.6 | Worried about not having enough money for old age: not worried at all, secondary education or more (% ages 15+) |
-| fin44a3.d.10 | Worried about not having enough money for old age: not worried at all, urban (% age 15+) |
-| fin44a3.d.3 | Worried about not having enough money for old age: not worried at all, young (% ages 15-24) |
-| fin44a2.d | Worried about not having enough money for old age: somewhat worried (% age 15+) |
-| fin44a2.d.1 | Worried about not having enough money for old age: somewhat worried, female (% age 15+) |
-| fin44a2.d.12 | Worried about not having enough money for old age: somewhat worried, in labor force (% age 15+) |
-| fin44a2.d.7 | Worried about not having enough money for old age: somewhat worried, income, poorest 40% (% ages 15+) |
-| fin44a2.d.8 | Worried about not having enough money for old age: somewhat worried, income, richest 60% (% ages 15+) |
-| fin44a2.d.2 | Worried about not having enough money for old age: somewhat worried, male (% age 15+) |
-| fin44a2.d.4 | Worried about not having enough money for old age: somewhat worried, older (% age 25+) |
-| fin44a2.d.11 | Worried about not having enough money for old age: somewhat worried, out of labor force (% age 15+) |
-| fin44a2.d.5 | Worried about not having enough money for old age: somewhat worried, primary education or less (% ages 15+) |
-| fin44a2.d.9 | Worried about not having enough money for old age: somewhat worried, rural (% age 15+) |
-| fin44a2.d.6 | Worried about not having enough money for old age: somewhat worried, secondary education or more (% ages 15+) |
-| fin44a2.d.10 | Worried about not having enough money for old age: somewhat worried, urban (% age 15+) |
-| fin44a2.d.3 | Worried about not having enough money for old age: somewhat worried, young (% ages 15-24) |
-| fin44a1.d | Worried about not having enough money for old age: very worried (% age 15+) |
-| fin44a1.d.1 | Worried about not having enough money for old age: very worried, female (% age 15+) |
-| fin44a1.d.12 | Worried about not having enough money for old age: very worried, in labor force (% age 15+) |
-| fin44a1.d.7 | Worried about not having enough money for old age: very worried, income, poorest 40% (% ages 15+) |
-| fin44a1.d.8 | Worried about not having enough money for old age: very worried, income, richest 60% (% ages 15+) |
-| fin44a1.d.2 | Worried about not having enough money for old age: very worried, male (% age 15+) |
-| fin44a1.d.4 | Worried about not having enough money for old age: very worried, older (% age 25+) |
-| fin44a1.d.11 | Worried about not having enough money for old age: very worried, out of labor force (% age 15+) |
-| fin44a1.d.5 | Worried about not having enough money for old age: very worried, primary education or less (% ages 15+) |
-| fin44a1.d.9 | Worried about not having enough money for old age: very worried, rural (% age 15+) |
-| fin44a1.d.6 | Worried about not having enough money for old age: very worried, secondary education or more (% ages 15+) |
-| fin44a1.d.10 | Worried about not having enough money for old age: very worried, urban (% age 15+) |
-| fin44a1.d.3 | Worried about not having enough money for old age: very worried, young (% ages 15-24) |
+It is reflected in the data:
+39 countries have 6 indicators available.
+Overall missingness is 42%.
 
-#### Data Processing
-The raw data was cleaned and processed as follows:
-1. Eliminated rows that lacked a country name or a series code.
-2. Ordered the data to cluster related series together.
-3. Transformed the data by indexing it with country names. The columns represent series codes, and the values correspond to the most recent survey wave for each series.
-4. Removed all rows (excluded all countries) with no data available.
-5. Removed all columns that had more than 50% missing values. This step excluded data related to rural/urban stratification.
-6. Missing values were imputed using appropriate aggregate values for each column.
+A complete submatrix (a tile) encompassing 140 countries and 6 indicators was recovered. The largest area-wise matrix is 72 x 208.
+### The dataset has a multiresolution structure
+### There is a submatrix which encompasses all 140 rows and 6 indicators and it provides a backbone grouping
+### The final grouping reasigns countries based on data available in smaller subsets
+The final grouping produces weaker separation when evaluated only in the 140 × 6 backbone space. This is expected because the consensus labels also incorporate indicators unavailable in that submatrix.
+## Limitations
+The main limitation is the property of the chosen method, that is unsupervised clustering. Because there is no known ground-truth country grouping, the result cannot be validated against a single definitive benchmark. One can validate internal cluster metrics and try to find external sources to validate the grouping against (like WB income level, HBR indicator). Ultimately the grouping reflects the dataset structure but it is beyond the scope of this project to assess the semantic meaning and it's releance to financial inclusion or wider econonomic and sociological implications as it is beyond the author's expertise.
+
+The information about the percentage of people using account cannot be successfully recovered from the relevant indicators suggesting a [denominator problem](https://medium.com/@embeer/the-denominator-problem-in-findex-accd68dc3bbe). The account ownership is one of the backbone indicators in the dataset, available throughout all waves and only in the last wave the inconsistencies are present. Nevertheless this data, which is officially available, is used in the analysis.
+
+The project does not model missingness under a specific MAR or MNAR mechanism.
+
+The coverage is uneven. Some countries occur only in one submatrix, other occur in all 60 discovered submatrices. One reason is the dataset structure, where 39 countries are provided with data for 6 indicators and the rest is missing. Another is the randomized algorithm discovers only a subset of tiles.
+## Future work
+### Even coverage
+There can be extensions of biclique selection which provide more even coverage. It is either thorough selecting bicliques through analyzing missingness structure or anchoring required values in the feature matrix and selecting bicliques specifically encompassing them.
+## Repository structure
+- [`Data/Processed/`](https://chatgpt.com/g/g-p-67c5df224ab08191b8b73edef920ff05/c/Data/Processed/) contains the processed country–indicator matrices, complete submatrices identified for each Findex wave, and the final Wave 5 clustering assignments.
+- [`Notebooks/`](https://chatgpt.com/g/g-p-67c5df224ab08191b8b73edef920ff05/c/Notebooks/) contains the analysis workflow:
+	- `01_Data_Preparation.ipynb` prepares the data, examines missingness across waves, and identifies complete submatrices. It links to functions outside this repository.
+	- `02_EDA.ipynb` explores two of the Wave 5 submatrices and evaluates candidate cluster counts using K-means, silhouette diagnostics, PCA, and t-SNE.
+    - `03_Clustering.ipynb` clusters individual submatrices, constructs the consensus matrix, and produces the final agglomerative clustering.
+    - `04_Clustering_Analysis.ipynb` visualizes and profiles the final clusters and evaluates their relationships with individual indicators.
+    - `05_correlation_exploration.ipynb` is a separate methodological exploration of Pearson correlations and is not part of the clustering pipeline. It is included because a Towards Data Science article is linking to it.
+- [`Src/`](https://chatgpt.com/g/g-p-67c5df224ab08191b8b73edef920ff05/c/Src/) contains reusable functions for importing complete submatrices, evaluating clustering solutions, aligning cluster labels, and plotting clustering diagnostics.
+- [`Sql/`](https://chatgpt.com/g/g-p-67c5df224ab08191b8b73edef920ff05/c/Sql/) contains queries used to extract the unstratified Findex indicators and inspect indicator coverage, population, and zero values.
+- [`config.py`](https://chatgpt.com/g/g-p-67c5df224ab08191b8b73edef920ff05/c/config.py) defines paths to the local data sources and supports machine-specific overrides through `config_local.py`.
+The main clustering workflow follows notebooks `01` through `04`; notebook `05` is supplementary.
