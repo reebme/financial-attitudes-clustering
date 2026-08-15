@@ -1,11 +1,15 @@
-# Finding Global Financial Inclusion Patterns in Incomplete Data
-It uses The Global Findex Database, a source of data on how adults around the world access and use financial services, to discover if there is a plausible grouping of countries based on available indicators.
+# Can consensus across complete submatrices recover coherent country groupings from high-dimensional Global Findex data with structured missingness?
+The Global Findex Database is used  to discover if there is a plausible grouping of countries based on available indicators. It is a source of data on how adults around the world access and use financial services.
 
 Wave 5 data is used.
 ## Project objective
+Do the countries form reproducible groups characterized by distinct patterns of financial-service access and use?
+
+Or are the apparent groups arbitrary divisions of a continuous development spectrum, or are sensitive to indicator availability, missingness and the selected number of clusters.
+
 Given the dataset's missigness, ranging from 9% in wave 3 to 42% in wave 5, the project tries to discover the structure of the data in wave 5, using unsupervised clustering.
 
-The aim is to use available data without imputation.
+The aim is to use available data without imputation and examine the robustness of the discovered structure.
 ## Method overview
 Values reported as zero are treated as missing because of their [documented ambiguity](https://medium.com/@embeer/world-bank-data-suggests-0-of-australians-have-a-credit-card-obviously-false-a4d34dafacdf). Preprocessing involves scaling. Data in findex is survey and it is reported as percentages but the values are either fractions (0,1) or integers (0, 100).
 
