@@ -6,13 +6,16 @@ import numpy as np
 
 from sklearn.metrics import silhouette_score, silhouette_samples
 
-def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labels: np.ndarray):
+def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labels: np.ndarray, colors: np.ndarray):
     '''
     Assumptions:
     - clusters go from 0 to (no_clusters - 1),
     - data is a feature mmatrix: rows: observations x columns:features,
     - labels label observations, that is, len(labels) == data.shape[0].
     '''
+    if len(colors) != no_clusters:
+        raise ValueError(f"{no_clusters} clusters and {len(colors)} colors supplied.")
+
     fig, ax = plt.subplots(figsize=(5,6))
 
     mean_silh_score = silhouette_score(data, labels)
@@ -28,7 +31,7 @@ def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labe
         k_size = ind_k_silh_score.shape[0]
         y_upper = y_lower + k_size
 
-        k_color = cm.viridis(float(k)/no_clusters)
+        k_color = colors[k]
         ax.fill_betweenx(
             np.arange(y_lower, y_upper),
             0,
