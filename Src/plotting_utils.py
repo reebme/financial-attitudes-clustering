@@ -1,0 +1,243 @@
+import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.colors import ListedColormap
+import matplotlib.patches as mpatches
+
+import numpy as np
+import numpy.typing as npt
+
+import pandas as pd
+
+import geopandas as gpd
+
+from pathlib import Path
+
+CURVE_COLOR ='#246A73'
+GRID_COLOR = '#D2CCC3'
+MAP_BCKGND_COLOR = 'ghostwhite'
+
+def pretty_plot(
+    ax: Axes,
+    x_ax: npt.ArrayLike,
+    y_ax: npt.ArrayLike,
+    title: str | None = None,
+    x_axis_title: str | None = None,
+    y_axis_title: str | None = None,
+):
+    ax.plot(x_ax, y_ax, linewidth=1.5, c=CURVE_COLOR)
+
+    ax.set_xticks(x_ax)
+    ax.set_yticks(np.linspace(min(y_ax), max(y_ax), num = 10, endpoint=True))
+
+    # labels
+    ax.set_title(
+        title,
+        fontsize=14,
+        pad=12
+    )
+    
+    ax.set_xlabel(
+        x_axis_title,
+        fontsize=11
+    )
+    
+    ax.set_ylabel(
+        y_axis_title,
+        fontsize=11
+    )
+
+    # background color
+    # fig.patch.set_facecolor(BCKGND_COLOR)
+    # ax.set_facecolor(BCKGND_COLOR)
+    
+    for spine in ['top', 'right']:
+        ax.spines[spine].set_visible(False)
+    
+    ax.grid(
+        True,
+        color = GRID_COLOR,
+        linewidth = 0.5,
+        alpha = 0.5,
+    )
+    
+    ax.grid(True)
+
+    return ax
+
+def plot_cluster_map(
+    ax: Axes,
+    cluster_series: pd.Series,
+    labels: dict[int, str],
+    palette: dict[int, str],
+    projection: str = "ESRI:54048",
+    title: str | None = None,
+    legend_orientation: str  = 'vertical', # horizontal or vertical
+    save_file_name: str | None = None
+):
+    """
+    Plot a world choropleth map of categorical cluster assignments.
+
+    Countries are colored according to cluster membership using a
+    user-supplied categorical palette. Countries without available
+    observations are shown separately using a hatched grey fill.
+
+    Parameters
+    ----------
+    cluster_series : pd.Series
+        Series mapping ISO3 country codes to integer cluster labels.
+        The index is expected to contain ISO3 country codes matching
+        the `SOV_A3` field of the Natural Earth dataset.
+
+    labels : dict[int, str]
+        Mapping from cluster identifier to legend label.
+
+    palette : dict[int, str]
+        Mapping from cluster identifier to color hex code.
+
+    projection : str, default "ESRI:54030"
+        CRS projection used for rendering the map.
+
+    title : str, optional
+        Figure title.
+
+    legend_orientation : str, default 'vertical'
+        Legend layout orientation. Currently only vertical layout
+        is implemented.
+
+    save_file_name : str, optional
+        If provided, save the figure to this path.
+
+    Notes
+    -----
+    - Uses the Natural Earth 1:10m country dataset.
+    - Cluster identifiers are assumed to be integers.
+    - Missing observations are displayed separately and are not
+      expected in `labels` or `palette`.
+    - The function displays and closes the matplotlib figure,
+      making it suitable for repeated use inside loops.
+    """
+    # clusters are assumed to be integer
+    # which isn't checked
+    categories = np.sort(cluster_series.dropna().astype(int).unique())
+
+    assert set(categories) <= set(labels.keys()), (
+        f"Unlabeled categories found: {set(categories) - set(labels.keys())}"
+    )
+
+    assert set(categories) <= set(palette.keys()), (
+        f"Categories lacking color in palette found: {set(categories) - set(palette.keys())}"
+    )
+
+    assert set(labels.keys()) == set(palette.keys()), (
+        f"Clusters in labels and palette not equal"
+    )
+
+    #world_file = '../data/raw/geodata/ne_10m_admin_0_countries.zip'
+    world_file = (
+        Path(__file__).resolve().parent.parent
+        / "Data"
+        / "Raw"
+        / "geodatasets"
+        / "ne_10m_admin_0_countries.zip"
+    )
+
+    # import world data to draw countries
+    world = gpd.read_file(world_file)
+    assert not world.empty
+    
+    # drop Antarctica
+    world = world[world["CONTINENT"] != "Antarctica"].copy()
+
+    # choose a projection
+    world = world.to_crs(projection)
+
+    # prepare dataframe for plotting
+    world["_cluster"] = world["SOV_A3"].map(cluster_series)
+
+    cmap = ListedColormap(
+        [palette[c] for c in categories]
+    )
+
+    border_color = "#E8E2D8"
+    # border_color = 'white'
+    border_width = 0.5
+    
+    world.plot(
+            ax = ax,
+            column = '_cluster',
+            categorical = True,
+            cmap = cmap,
+            missing_kwds = {
+                "color": "lightgrey",
+                "edgecolor": "darkgrey",
+                "hatch": "///",
+                "label": "Missing values",
+            },
+            edgecolor = border_color,
+            linewidth = border_width
+        )
+    
+    if title:
+            ax.set_title(title, fontsize = 18, pad = 14)
+    
+    # prepare the legend: clusters
+    handles = [
+        mpatches.Patch(
+            facecolor = palette[cat],
+            edgecolor = "none",
+            label = labels[int(cat)]
+        )
+        for cat in categories
+    ]
+    
+    # prepare legend: missing values
+    handles.append(
+        mpatches.Patch(
+            facecolor="lightgrey",
+            edgecolor="darkgrey",
+            hatch="///",
+            label="Missing values"
+        )
+    )
+    
+    # vertical stacked legend
+    ax.legend(
+        handles = handles,
+        loc = "lower left",
+        frameon = False,
+        fontsize = 16
+    )
+    
+    '''
+    # horizontal legend
+    ax.legend(
+        handles = handles,
+        loc = 'lower center',
+        bbox_to_anchor = (0.5, -0.08),
+        ncol = len(categories) + 2,
+        frameon = False,
+        fontsize = 10,
+        handlelength = 1.8,
+        columnspacing = 1.4
+    )
+    '''
+
+    # the pretty stuff
+    ax.set_facecolor(MAP_BCKGND_COLOR)
+    ax.set_axis_off()
+    
+    # crop out Antarctica
+    #ylim=(-6_000_000, 8_500_000)
+    #ax.set_ylim(*ylim)
+   
+    # reduce empty space on the sides 
+    #xlim = (-14_000_000, 16_000_000)
+    #ax.set_xlim(*xlim)
+
+    # force the axes to the projected world bounds
+    xmin, ymin, xmax, ymax = world.total_bounds
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ax.margins(0)
+    
+    return ax 

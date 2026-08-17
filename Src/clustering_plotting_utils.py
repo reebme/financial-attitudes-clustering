@@ -1,12 +1,19 @@
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from matplotlib.axes import Axes
 
 import pandas as pd
 import numpy as np
 
 from sklearn.metrics import silhouette_score, silhouette_samples
 
-def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labels: np.ndarray, colors: np.ndarray):
+def plot_silhouette_scores_distribution(
+    ax: Axes,
+    no_clusters: int, 
+    data: np.ndarray, 
+    labels: np.ndarray, 
+    colors: np.ndarray
+):
     '''
     Assumptions:
     - clusters go from 0 to (no_clusters - 1),
@@ -15,8 +22,6 @@ def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labe
     '''
     if len(colors) != no_clusters:
         raise ValueError(f"{no_clusters} clusters and {len(colors)} colors supplied.")
-
-    fig, ax = plt.subplots(figsize=(5,6))
 
     mean_silh_score = silhouette_score(data, labels)
 
@@ -43,7 +48,8 @@ def plot_silhouette_scores_distribution(no_clusters: int, data: np.ndarray, labe
         y_lower = y_upper + gap
 
     ax.axvline(mean_silh_score, c="red", linestyle='--', linewidth=0.5)
-    plt.show()
+
+    return ax
 
 def plot_metric_clusters(cluster_no, metric, iter_no, plot_title, xlabel, ylabel):
     """
