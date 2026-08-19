@@ -101,8 +101,8 @@ def plot_cluster_map(
     projection: str = "ESRI:54048",
     title: str | None = None,
     legend_orientation: str  = 'vertical', # horizontal or vertical
-    save_file_name: str | None = None
-):
+    save_file_name: str | Path | None = None
+) -> Axes:
     """
     Plot a world choropleth map of categorical cluster assignments.
 
@@ -112,29 +112,35 @@ def plot_cluster_map(
 
     Parameters
     ----------
-    cluster_series : pd.Series
-        Series mapping ISO3 country codes to integer cluster labels.
-        The index is expected to contain ISO3 country codes matching
-        the `SOV_A3` field of the Natural Earth dataset.
+    ax : matplotlib.axes.Axes
+        Axes on which to draw the map.
 
-    labels : dict[int, str]
-        Mapping from cluster identifier to legend label.
+    cluster_series : pandas.Series
+        Integer cluster labels indexed by ISO3 country code.
 
-    palette : dict[int, str]
-        Mapping from cluster identifier to color hex code.
+    labels : dict of int to str
+        Cluster identifiers mapped to legend labels.
 
-    projection : str, default "ESRI:54030"
-        CRS projection used for rendering the map.
+    palette : dict of int to str
+        Cluster identifiers mapped to Matplotlib-compatible colors.
 
-    title : str, optional
-        Figure title.
+    projection : str, default="ESRI:54048"
+        Coordinate reference system used to render the map.
 
-    legend_orientation : str, default 'vertical'
-        Legend layout orientation. Currently only vertical layout
-        is implemented.
+    title : str or None, default=None
+        Optional axes title.
 
-    save_file_name : str, optional
-        If provided, save the figure to this path.
+    legend_orientation : str, default="vertical"
+        Requested legend layout. Retained for compatibility; only a vertical
+        legend is currently drawn.
+
+    save_file_name : str, pathlib.Path, or None, default=None
+        Requested output path. Retained for compatibility and currently unused.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The modified axes.
 
     Notes
     -----
@@ -142,8 +148,6 @@ def plot_cluster_map(
     - Cluster identifiers are assumed to be integers.
     - Missing observations are displayed separately and are not
       expected in `labels` or `palette`.
-    - The function displays and closes the matplotlib figure,
-      making it suitable for repeated use inside loops.
     """
     # clusters are assumed to be integer
     # which isn't checked
