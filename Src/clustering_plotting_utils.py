@@ -148,42 +148,45 @@ def align_country_codes(
     df2_code_col: str,
     df2_name_col: str,
     updated_code_col: str = "Updated Country Code",
-    fuzzy_threshold: int = 60):
-    """
-    Aligns country codes in df1 with codes from df2.
-    Uses direct code matching first, and falls back to fuzzy matching on the
-    name columns if direct match is not found in df2.
-    
-    Parameters:
-    - df1 : pd.DataFrame
-        The primary DataFrame whose code column is updated.
-    Must contain:
-          - df1_code_col
-          - df1_name_col
-    - df2 : pd.DataFrame
-        The secondary DataFrame that contains the desired codes.
-        Must contain:
-          - df2_code_col
-          - df2_name_col
-    - df1_code_col : str
-        Name of the column in df1 that holds the initial codes.
-    - df1_name_col : str
-        Name of the column in df1 that holds the country names (for fuzzy matching).
-    - df2_code_col : str
-        Name of the column in df2 that holds the codes.
-    - df2_name_col : str
-        Name of the column in df2 that holds the country names (for fuzzy matching).
-    - updated_code_col : str, optional
-        Name of the new column in df1 that will store the updated codes.
-        Defaults to "Updated Country Code".
-    - fuzzy_threshold : int, optional
-        Minimum fuzzy ratio to accept a match when direct code lookup fails,
-        between 0 and 100. Defaults to 60.
+    fuzzy_threshold: int = 60,
+) -> list[tuple[Any, Any, Any, Any]]:
+    """Update country codes in ``df1`` using direct or fuzzy matches in ``df2``.
 
-    Returns:
-    - changed_codes : list of tuples
-        List of (df1_country_name, old_code, matched_country_name, matched_code)
-        for each row where the code was changed.
+    ``df1`` is mutated by adding ``updated_code_col``. Direct code matches are
+    retained; unmatched codes fall back to fuzzy country-name matching.
+
+    Parameters
+    ----------
+    df1 : pandas.DataFrame
+        DataFrame whose country codes are updated. This object is modified in
+        place by adding ``updated_code_col``.
+
+    df2 : pandas.DataFrame
+        Reference DataFrame containing the desired country codes.
+
+    df1_code_col : str
+        Name of the country-code column in ``df1``.
+
+    df1_name_col : str
+        Name of the country-name column in ``df1``.
+
+    df2_code_col : str
+        Name of the country-code column in ``df2``.
+
+    df2_name_col : str
+        Name of the country-name column in ``df2``.
+
+    updated_code_col : str, default="Updated Country Code"
+        Name of the new column in ``df1`` that receives aligned codes.
+
+    fuzzy_threshold : int, default=60
+        Minimum accepted fuzzy-match score from 0 to 100.
+
+    Returns
+    -------
+    list of tuple
+        Source name, source code, matched name, and matched code for every row
+        whose code changed.
     """
 
     # Initialize the updated code column
