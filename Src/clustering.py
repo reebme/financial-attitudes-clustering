@@ -95,22 +95,19 @@ def relabel_clustering(
             relabeled[mask] = mapping[0][i]
     return relabeled
 
-def align_labels(clusters):
-    """
-    Aligns cluster labels across multiple clustering iterations to ensure consistency.
+def align_labels(clusters: Sequence[np.ndarray]) -> np.ndarray:
+    """Align labels from repeated clustering runs to the first run.
 
-    Uses the first clustering iteration as a reference and realigns subsequent cluster
-    labels to match the reference. This is useful when different clustering runs assign
-    different numerical labels to the same clusters.
+    Parameters
+    ----------
+    clusters : sequence of numpy.ndarray
+        Nonempty sequence of equal-length label arrays. The first array is used
+        as the reference labeling.
 
-    Parameters:
-    - clusters (list of numpy.ndarray): A list where each element is a NumPy array containing
-            cluster labels from a clustering iteration. All arrays should have the same length,
-            corresponding to the number of data points.
-
-    Returns:
-    - numpy.ndarray: A 2D NumPy array of shape (n_iterations, n_data_points) with aligned
-            cluster labels, where each row represents a clustering iteration.
+    Returns
+    -------
+    numpy.ndarray of shape (n_iterations, n_samples)
+        Label assignments after aligning every run to the first run.
     """
     reference_labels = clusters[0]
     aligned_clusters = [clusters[0]]
