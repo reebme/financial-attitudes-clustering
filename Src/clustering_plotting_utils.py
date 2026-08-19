@@ -83,20 +83,41 @@ def plot_silhouette_scores_distribution(
 
     return ax
 
-def plot_metric_clusters(cluster_no, metric, iter_no, plot_title, xlabel, ylabel):
-    """
-    Plots the metric value for different cluster numbers
-    across various iterations of K-means clustering.
+def plot_metric_clusters(
+    cluster_no: Sequence[int],
+    metric: Mapping[tuple[int, Any], float],
+    iter_no: int,
+    plot_title: str,
+    xlabel: str,
+    ylabel: str,
+) -> None:
+    """Plot a clustering metric against a secondary parameter for each K.
 
-    Parameters:
-    - cluster_numbers (list or iterable): A list of cluster numbers to plot.
-    - metric (dict): A dictionary where keys are tuples (cluster_number, parameter) and values are the metric.
-    - iter_no (int): The number of K-means iterations.
-    - plot_title (str): The main title for the entire plot.
-        - plot_title (str): The main title for the entire plot.
+    Parameters
+    ----------
+    cluster_no : sequence of int
+        Cluster counts for which to create subplots.
 
-    Returns:
-    - None
+    metric : mapping
+        Metric values keyed by ``(cluster_count, parameter_value)``.
+
+    iter_no : int
+        Number of K-means iterations represented by the metric. Retained for
+        compatibility; the implementation does not inspect this argument.
+
+    plot_title : str
+        Figure title.
+
+    xlabel : str
+        Label for each subplot's x-axis.
+
+    ylabel : str
+        Label for each subplot's y-axis.
+
+    Returns
+    -------
+    None
+        The function creates and configures a Matplotlib figure.
     """
     subplot_height = 5
 
