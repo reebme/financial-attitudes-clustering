@@ -1,15 +1,45 @@
+from __future__ import annotations
+
+from os import PathLike
+
 import pandas as pd
 import numpy as np
 
 from sklearn.preprocessing import StandardScaler
 
-def import_bicliques(processed_data_file, bicliques_file, standardized=False):
-    '''
-    processed_data_file contains the original data with missingness
-    it's a pandas dataframe written into a parquet file
-    bicliques_file contains a dataframe with found rows and columns of the complete submatrices
-    it's a csv file, parquet won't serialize numpy arrays
-    '''
+def import_bicliques(
+    processed_data_file: str | PathLike[str],
+    bicliques_file: str | PathLike[str],
+    standardized: bool = False,
+) -> tuple[pd.DataFrame, list[pd.DataFrame]]:
+    """Load a processed feature matrix and extract its complete submatrices.
+
+    Parameters
+    ----------
+    processed_data_file : str or path-like
+        Parquet file containing the country-by-indicator matrix, including its
+        missing values.
+
+    bicliques_file : str or path-like
+        CSV file containing serialized row and column index arrays for complete
+        submatrices.
+
+    standardized : bool, default=False
+        Whether to standardize every feature before extracting submatrices.
+
+    Returns
+    -------
+    data : pandas.DataFrame
+        Loaded feature matrix, standardized when requested.
+
+    complete_data : list of pandas.DataFrame
+        Complete submatrices described by the biclique file.
+
+    Raises
+    ------
+    ValueError
+        If any extracted submatrix contains a missing value.
+    """
     bicliques = pd.read_csv(bicliques_file, index_col=0)
 
     # bicliques are written in the file as strings separated with whitespace, with occasional \n
