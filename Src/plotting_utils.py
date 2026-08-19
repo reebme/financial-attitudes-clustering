@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
@@ -23,7 +25,34 @@ def pretty_plot(
     title: str | None = None,
     x_axis_title: str | None = None,
     y_axis_title: str | None = None,
-):
+) -> Axes:
+    """Draw a consistently styled line plot.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        Axes on which to draw the plot.
+
+    x_ax : array-like
+        Values for the x-axis and its tick positions.
+
+    y_ax : array-like
+        Nonempty numeric values for the y-axis.
+
+    title : str or None, default=None
+        Optional axes title.
+
+    x_axis_title : str or None, default=None
+        Optional x-axis label.
+
+    y_axis_title : str or None, default=None
+        Optional y-axis label.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The modified axes.
+    """
     ax.plot(x_ax, y_ax, linewidth=1.5, c=CURVE_COLOR)
 
     ax.set_xticks(x_ax)
