@@ -1,4 +1,10 @@
+from __future__ import annotations
+
+from collections.abc import Iterable, Sequence
+from typing import Any
+
 import numpy as np
+import numpy.typing as npt
 from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
 from itertools import product
@@ -6,31 +12,39 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, silhouette_samples
 from scipy.stats import mode
 
-def find_label_alignement(reference, labels):
-    """
-    Align cluster labels to match a reference labeling.
+LabelMapping = tuple[np.ndarray, np.ndarray]
+MetricKey = tuple[Any, ...]
 
-    When K-means clustering is performed multiple times, the numerical labels assigned to clusters
-    can differ between runs even if the cluster assignments are effectively the same. This function
-    realigns the labels in `labels` to best match the `reference` labels by finding an optimal
-    permutation of label assignments that maximizes the correspondence between clusters.
 
-    This function uses a confusion matrix to evaluate the correspondence between clusters and applies
-    the Hungarian algorithm (linear_sum_assignment) to find the optimal label permutation.
+def find_label_alignement(
+    reference: npt.ArrayLike,
+    labels: npt.ArrayLike,
+) -> LabelMapping:
+    """Find the label permutation that best matches a reference clustering.
 
-    Parameters:
-    - reference : array-like of shape (n_samples,)
-        The reference labels to which the cluster labels should be aligned. This could be the true
-        labels in a supervised setting or a consistent labeling from a previous clustering run.
+    A confusion matrix measures overlap between the two clusterings. The
+    Hungarian assignment algorithm then finds the permutation that maximizes
+    total overlap.
 
-    - labels : array-like of shape (n_samples,)
-        The cluster labels obtained from a K-means clustering run that need to be realigned to match
-        the reference labels.
+    Parameters
+    ----------
+    reference : array-like of shape (n_samples,)
+        Reference cluster labels.
 
-    Returns:
-    - mapping (tuple of array-like): A tuple containing two lists or arrays:
-            - mapping[0]: Desired labels.
-            - mapping[1]: Current labels to be replaced.
+    labels : array-like of shape (n_samples,)
+        Cluster labels to align with ``reference``.
+
+    Returns
+    -------
+    tuple of numpy.ndarray
+        Row and column indices returned by the Hungarian assignment. The first
+        array identifies desired labels and the second identifies labels to
+        replace.
+
+    Raises
+    ------
+    ValueError
+        If the two inputs contain different numbers of distinct clusters.
     """
     # the number of clusters
     no_clusters = len(set(labels))
