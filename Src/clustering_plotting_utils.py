@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from collections.abc import Mapping, Sequence
+from typing import Any
+
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.axes import Axes
@@ -13,13 +18,40 @@ def plot_silhouette_scores_distribution(
     data: np.ndarray, 
     labels: np.ndarray, 
     colors: np.ndarray
-):
-    '''
-    Assumptions:
-    - clusters go from 0 to (no_clusters - 1),
-    - data is a feature mmatrix: rows: observations x columns:features,
-    - labels label observations, that is, len(labels) == data.shape[0].
-    '''
+) -> Axes:
+    """Plot per-cluster silhouette distributions on an axes object.
+
+    Cluster labels must be consecutive integers from zero through
+    ``no_clusters - 1``. ``data`` contains observations by row and features by
+    column, and ``labels`` must contain one label per observation.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        Axes on which to draw the distributions.
+
+    no_clusters : int
+        Number of clusters represented by ``labels``.
+
+    data : numpy.ndarray of shape (n_samples, n_features)
+        Feature matrix used to compute silhouette values.
+
+    labels : numpy.ndarray of shape (n_samples,)
+        Cluster label for each observation.
+
+    colors : numpy.ndarray of shape (no_clusters, ...)
+        One Matplotlib-compatible color per cluster.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The modified axes.
+
+    Raises
+    ------
+    ValueError
+        If the number of colors differs from ``no_clusters``.
+    """
     if len(colors) != no_clusters:
         raise ValueError(f"{no_clusters} clusters and {len(colors)} colors supplied.")
 
