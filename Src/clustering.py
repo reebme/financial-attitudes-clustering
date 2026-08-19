@@ -118,22 +118,47 @@ def align_labels(clusters: Sequence[np.ndarray]) -> np.ndarray:
     aligned_clusters = np.array(aligned_clusters)
     return aligned_clusters
 
-def compute_kmeans_metrics(X_PCA, param_grid, iter_no = 1):
-    """
-    Compute mean Within-Group Sum of Squares (WGSS) and silhouette scores for each KMeans parameter combination.
+def compute_kmeans_metrics(
+    X_PCA: np.ndarray,
+    param_grid: dict[str, Iterable[Any]],
+    iter_no: int = 1,
+) -> tuple[
+    dict[MetricKey, float],
+    dict[MetricKey, float],
+    dict[MetricKey, float],
+    dict[MetricKey, np.ndarray],
+]:
+    """Evaluate K-means parameter combinations over repeated fits.
 
-    Parameters:
-    - X_PCA (array-like): PCA-transformed dataset.
-    - param_grid (dict): Dictionary of KMeans parameters and their possible values (list or iterable).
-    - iter_no (int, optional): Number of iterations to average the metrics over. Defaults to 1.
+    K-means is fitted on the selected leading PCA components. Silhouette
+    metrics are calculated in the full supplied PCA space.
 
-    Returns:
-    - tuple: 
-        - mean_wgss (dict): Average WGSS for each parameter combination.
-        - mean_silh_score (dict): Average silhouette score for each parameter combination.
-        - mean_neg_silh_score (dict): Average fraction of samples with a negative silhouette score
-                                        for each parameter combination.
-        - labels (dict): Clustering labels for each parameter combination.
+    Parameters
+    ----------
+    X_PCA : numpy.ndarray of shape (n_samples, n_components)
+        PCA-transformed feature matrix.
+
+    param_grid : dict of str to iterable
+        Values to evaluate for each K-means parameter. The optional
+        ``pca_components`` entry controls how many leading components are used
+        for fitting and is not passed to ``KMeans``.
+
+    iter_no : int, default=1
+        Number of fits to average for each parameter combination.
+
+    Returns
+    -------
+    mean_wgss : dict
+        Mean within-cluster sum of squares by parameter combination.
+
+    mean_silh_score : dict
+        Mean silhouette score by parameter combination.
+
+    mean_neg_silh_score : dict
+        Mean fraction of observations with negative silhouette values.
+
+    labels : dict
+        Aligned label arrays for every fit and parameter combination.
     """
     # mean WGSS for each parameter combination
     mean_wgss = {}
