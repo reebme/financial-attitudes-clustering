@@ -83,6 +83,8 @@ def plot_silhouette_scores_distribution(
 
     return ax
 
+'''Unused functions retained for reference.
+
 def plot_metric_clusters(
     cluster_no: Sequence[int],
     metric: Mapping[tuple[int, Any], float],
@@ -225,3 +227,4 @@ def align_country_codes(
                 df1.at[idx, updated_code_col] = matched_code
 
     return changed_codes
+'''

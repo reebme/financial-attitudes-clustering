@@ -16,6 +16,8 @@ LabelMapping = tuple[np.ndarray, np.ndarray]
 MetricKey = tuple[Any, ...]
 
 
+'''Unused function retained for reference.
+
 def find_label_alignement(
     reference: npt.ArrayLike,
     labels: npt.ArrayLike,
@@ -57,6 +59,9 @@ def find_label_alignement(
     # scipy.optimize.linear_sum_assignment solves the assignement problem
     # here is finds such a permutation of the labels, which maximizes the trace (data points correctly assigned)
     return linear_sum_assignment(cm, maximize = True)
+'''
+
+'''Unused function retained for reference.
 
 def relabel_clustering(
     reference: npt.ArrayLike,
@@ -94,6 +99,9 @@ def relabel_clustering(
             mask = (labels == mapping[1][i])
             relabeled[mask] = mapping[0][i]
     return relabeled
+'''
+
+'''Unused function retained for reference.
 
 def align_labels(clusters: Sequence[np.ndarray]) -> np.ndarray:
     """Align labels from repeated clustering runs to the first run.
@@ -117,6 +125,9 @@ def align_labels(clusters: Sequence[np.ndarray]) -> np.ndarray:
     # each effect of the clustering is in a row
     aligned_clusters = np.array(aligned_clusters)
     return aligned_clusters
+'''
+
+'''Unused function retained for reference.
 
 def compute_kmeans_metrics(
     X_PCA: np.ndarray,
@@ -238,3 +249,4 @@ def compute_kmeans_metrics(
 #        # label_freq[K] = label_freq_arr/N
 
     return (mean_wgss, mean_silh_score, mean_neg_silh_score, labels)
+'''
