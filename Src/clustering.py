@@ -58,23 +58,30 @@ def find_label_alignement(
     # here is finds such a permutation of the labels, which maximizes the trace (data points correctly assigned)
     return linear_sum_assignment(cm, maximize = True)
 
-def relabel_clustering(reference, labels, mapping):
-    """
-    Relabel cluster assignments to align with a reference using a provided mapping.
+def relabel_clustering(
+    reference: npt.ArrayLike,
+    labels: np.ndarray,
+    mapping: LabelMapping,
+) -> np.ndarray:
+    """Apply a label mapping to a clustering assignment.
 
-    This function updates the cluster labels in `labels` based on the `mapping` to match
-    the `reference` labels. If the current labels already align with the reference, it
-    returns the original labels. Otherwise, it replaces labels according to the mapping.
+    Parameters
+    ----------
+    reference : array-like of shape (n_samples,)
+        Reference labels associated with the mapping. Retained for interface
+        compatibility; the implementation does not inspect this argument.
 
-    Parameters:
-    - reference (array-like): The reference labels to align to.
-    - labels (array-like): The current cluster labels to be relabeled.
-    - mapping (tuple of array-like): A tuple containing two lists or arrays:
-            - mapping[0]: Desired labels.
-            - mapping[1]: Current labels to be replaced.
+    labels : numpy.ndarray of shape (n_samples,)
+        Cluster labels to transform.
 
-    Returns:
-        numpy.ndarray: The relabeled cluster assignments aligned to the reference.
+    mapping : tuple of numpy.ndarray
+        Desired labels followed by the current labels they replace.
+
+    Returns
+    -------
+    numpy.ndarray
+        Labels aligned according to ``mapping``. If the mapping is already the
+        identity, the original ``labels`` array is returned.
     """
     labels_match = (mapping[0] == mapping[1])
     if np.all(labels_match):
