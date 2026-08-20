@@ -76,10 +76,21 @@ def plot_silhouette_scores_distribution(
             facecolor=k_color,
             edgecolor=k_color
         )
+        ax.text(
+            0.02,
+            (y_lower + y_upper) / 2,
+            str(k),
+            fontsize=14,
+            ha="left",
+            va="center"
+        )
 
         y_lower = y_upper + gap
 
     ax.axvline(mean_silh_score, c="red", linestyle='--', linewidth=0.5)
+    ax.set_yticks([])
+    for spine in ("top", "right", "left"):
+        ax.spines[spine].set_visible(False)
 
     return ax
 
