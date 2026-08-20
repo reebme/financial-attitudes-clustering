@@ -5,6 +5,7 @@ from typing import Any
 
 import numpy as np
 import numpy.typing as npt
+import pandas as pd
 from sklearn.metrics import confusion_matrix
 from scipy.optimize import linear_sum_assignment
 from itertools import product
@@ -14,6 +15,35 @@ from scipy.stats import mode
 
 LabelMapping = tuple[np.ndarray, np.ndarray]
 MetricKey = tuple[Any, ...]
+
+
+def reassignment_purity(labels: pd.DataFrame) -> dict[str, float]:
+    """Measure refinement purity between successive cluster assignments.
+
+    Columns are interpreted from left to right as assignments for successive
+    cluster counts. For each adjacent pair, the score is the sum of the
+    largest predecessor-cluster count within each new cluster, divided by the
+    number of observations.
+
+    Parameters
+    ----------
+    labels : pandas.DataFrame-like
+        Rows are observations and columns are cluster assignments. Column
+        labels must be integer cluster counts with consecutive successors.
+
+    Returns
+    -------
+    dict of str to float
+        Purity values keyed by transitions such as ``"3->4"``.
+    """
+    purity_scores: dict[str, float] = {}
+    no_observations = labels.shape[0]
+    for k in labels.columns[:-1]:
+        reassignment = pd.crosstab(labels[k], labels[k + 1])
+        purity_scores[f"{k}->{k + 1}"] = (
+            reassignment.max(axis=0).sum() / no_observations
+        )
+    return purity_scores
 
 
 '''Unused function retained for reference.
