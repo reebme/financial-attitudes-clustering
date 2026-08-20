@@ -17,6 +17,63 @@ LabelMapping = tuple[np.ndarray, np.ndarray]
 MetricKey = tuple[Any, ...]
 
 
+def fit_kmeans_by_cluster_count(
+    data: npt.ArrayLike,
+    cluster_counts: Iterable[int],
+    *,
+    n_init: int | str | None = None,
+    random_state: int | None = None,
+    index: pd.Index,
+) -> tuple[dict[int, KMeans], pd.DataFrame]:
+    """Fit K-means models for multiple cluster counts.
+
+    Parameters
+    ----------
+    data : array-like of shape (n_samples, n_features)
+        Observations to cluster.
+    cluster_counts : iterable of int
+        Numbers of clusters for which to fit independent models.
+    n_init : int, str, or None, default=None
+        Number of K-means initializations. When ``None``, the installed
+        scikit-learn default is used.
+    random_state : int or None, default=None
+        Random seed. When ``None``, the installed scikit-learn default is
+        used.
+    index : pandas.Index
+        Observation index for the returned assignments. Its length must equal
+        the number of rows in ``data``.
+
+    Returns
+    -------
+    models : dict of int to sklearn.cluster.KMeans
+        Fitted model for each requested cluster count.
+    labels : pandas.DataFrame
+        Cluster assignments with cluster counts as columns.
+    """
+    data_array = np.asarray(data)
+    if data_array.ndim == 0 or len(index) != data_array.shape[0]:
+        raise ValueError(
+            "The index length must equal the number of rows in data."
+        )
+
+    model_options: dict[str, Any] = {}
+    if n_init is not None:
+        model_options["n_init"] = n_init
+    if random_state is not None:
+        model_options["random_state"] = random_state
+
+    models: dict[int, KMeans] = {}
+    assignments: dict[int, np.ndarray] = {}
+    for requested_count in cluster_counts:
+        cluster_count = int(requested_count)
+        model = KMeans(n_clusters=cluster_count, **model_options)
+        models[cluster_count] = model
+        assignments[cluster_count] = model.fit_predict(data_array)
+
+    labels = pd.DataFrame(assignments, index=index)
+    return models, labels
+
+
 def reassignment_purity(labels: pd.DataFrame) -> dict[str, float]:
     """Measure refinement purity between successive cluster assignments.
 
