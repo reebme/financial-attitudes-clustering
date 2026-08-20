@@ -21,7 +21,7 @@ MAP_BCKGND_COLOR = 'ghostwhite'
 def pretty_plot(
     ax: Axes,
     x_ax: npt.ArrayLike,
-    y_ax: npt.ArrayLike,
+    y_ax: npt.ArrayLike | list[npt.ArrayLike],
     title: str | None = None,
     x_axis_title: str | None = None,
     y_axis_title: str | None = None,
@@ -36,8 +36,9 @@ def pretty_plot(
     x_ax : array-like
         Values for the x-axis and its tick positions.
 
-    y_ax : array-like
-        Nonempty numeric values for the y-axis.
+    y_ax : array-like or list of array-like
+        One nonempty numeric series, or a list of series to overlay on the
+        same axes. Each series must have the same length as `x_ax`.
 
     title : str or None, default=None
         Optional axes title.
@@ -53,10 +54,16 @@ def pretty_plot(
     matplotlib.axes.Axes
         The modified axes.
     """
-    ax.plot(x_ax, y_ax, linewidth=1.5, c=CURVE_COLOR)
+    y_values = np.asarray(y_ax)
+    y_series = [y_values] if y_values.ndim == 1 else y_values
+
+    for series in y_series:
+        ax.plot(x_ax, series, linewidth=1.5, c=CURVE_COLOR)
 
     ax.set_xticks(x_ax)
-    ax.set_yticks(np.linspace(min(y_ax), max(y_ax), num = 10, endpoint=True))
+    ax.set_yticks(
+        np.linspace(y_values.min(), y_values.max(), num=10, endpoint=True)
+    )
 
     # labels
     ax.set_title(
