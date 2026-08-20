@@ -14,14 +14,14 @@ import geopandas as gpd
 
 from pathlib import Path
 
-CURVE_COLOR ='#246A73'
+# CURVE_COLOR = '#246A73'
 GRID_COLOR = '#D2CCC3'
 MAP_BCKGND_COLOR = 'ghostwhite'
 
 def pretty_plot(
     ax: Axes,
     x_ax: npt.ArrayLike,
-    y_ax: npt.ArrayLike | list[npt.ArrayLike],
+    ys: list[tuple[npt.ArrayLike, str, str]],
     title: str | None = None,
     x_axis_title: str | None = None,
     y_axis_title: str | None = None,
@@ -36,9 +36,9 @@ def pretty_plot(
     x_ax : array-like
         Values for the x-axis and its tick positions.
 
-    y_ax : array-like or list of array-like
-        One nonempty numeric series, or a list of series to overlay on the
-        same axes. Each series must have the same length as `x_ax`.
+    ys : list of tuple
+        Nonempty list of `(values, label, color)` tuples. Each values array
+        must be numeric and have the same length as `x_ax`.
 
     title : str or None, default=None
         Optional axes title.
@@ -54,15 +54,28 @@ def pretty_plot(
     matplotlib.axes.Axes
         The modified axes.
     """
-    y_values = np.asarray(y_ax)
-    y_series = [y_values] if y_values.ndim == 1 else y_values
+    if not ys:
+        raise ValueError("At least one y-series is required.")
 
-    for series in y_series:
-        ax.plot(x_ax, series, linewidth=1.5, c=CURVE_COLOR)
+    y_values = []
+    for values, label, color in ys:
+        series = np.asarray(values)
+        if series.ndim != 1 or len(series) != len(x_ax):
+            raise ValueError("Each y-series must be one-dimensional and match x_ax.")
+
+        y_values.append(series)
+        ax.plot(x_ax, series, linewidth=1.5, c=color, label=label)
+
+    ax.legend()
 
     ax.set_xticks(x_ax)
     ax.set_yticks(
-        np.linspace(y_values.min(), y_values.max(), num=10, endpoint=True)
+        np.linspace(
+            min(series.min() for series in y_values),
+            max(series.max() for series in y_values),
+            num=10,
+            endpoint=True,
+        )
     )
 
     # labels
