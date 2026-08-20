@@ -139,7 +139,8 @@ def plot_cluster_map(
         Integer cluster labels indexed by ISO3 country code.
 
     labels : dict of int to str
-        Cluster identifiers mapped to legend labels.
+        Cluster identifiers mapped to legend labels. The number of assigned
+        countries is appended to each label in parentheses.
 
     palette : dict of int to str
         Cluster identifiers mapped to Matplotlib-compatible colors.
@@ -172,6 +173,7 @@ def plot_cluster_map(
     # clusters are assumed to be integer
     # which isn't checked
     categories = np.sort(cluster_series.dropna().astype(int).unique())
+    cluster_counts = cluster_series.dropna().astype(int).value_counts()
 
     assert set(categories) <= set(labels.keys()), (
         f"Unlabeled categories found: {set(categories) - set(labels.keys())}"
@@ -238,7 +240,7 @@ def plot_cluster_map(
         mpatches.Patch(
             facecolor = palette[cat],
             edgecolor = "none",
-            label = labels[int(cat)]
+            label = f"{labels[int(cat)]} ({cluster_counts[int(cat)]})"
         )
         for cat in categories
     ]
@@ -256,9 +258,11 @@ def plot_cluster_map(
     # vertical stacked legend
     ax.legend(
         handles = handles,
+        title = "Cluster (count)",
         loc = "lower left",
         frameon = False,
-        fontsize = 16
+        fontsize = 16,
+        title_fontsize = 16
     )
     
     '''
